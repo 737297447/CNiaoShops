@@ -8,12 +8,13 @@ import android.support.v7.widget.TintTypedArray;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
-import com.chhd.cniaoshops.util.UiUtils;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.per_library.util.UiUtils;
 
 /**
  * Created by CWQ on 2016/11/15.
@@ -22,8 +23,8 @@ import com.chhd.cniaoshops.util.UiUtils;
 public class CnToolbar extends Toolbar {
 
     private TextView tvTitle;
-    private EditText etSearchView;
-    private ImageButton ibRightButton;
+    private EditText etSearch;
+    private Button btnRight;
 
     public CnToolbar(Context context) {
         this(context, null);
@@ -36,18 +37,16 @@ public class CnToolbar extends Toolbar {
     public CnToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        initViews();
-
-        setContentInsetsRelative(UiUtils.dp2px(10), UiUtils.dp2px(10));
+        initView();
 
         initAttrs(attrs);
     }
 
-    private void initViews() {
+    private void initView() {
         View view = View.inflate(getContext(), R.layout.toolbar_cn, null);
-        tvTitle = (TextView) view.findViewById(R.id.toolbar_title);
-        etSearchView = (EditText) view.findViewById(R.id.toolbar_searchview);
-        ibRightButton = (ImageButton) view.findViewById(R.id.toolbar_rightButton);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        etSearch = (EditText) view.findViewById(R.id.et_search);
+        btnRight = (Button) view.findViewById(R.id.btn_right);
         addView(view);
     }
 
@@ -56,43 +55,31 @@ public class CnToolbar extends Toolbar {
 
         Drawable icon = tintTypedArray.getDrawable(R.styleable.CnToolbar_rightButtonIcon);
         if (icon != null) {
-            setRightButtonIcon(icon);
         }
 
         boolean isShowSearchView = tintTypedArray.getBoolean(R.styleable.CnToolbar_isShowSearchView, false);
         if (isShowSearchView) {
             showSearchView();
             hideTitleView();
-        }
-    }
-
-    public void setRightButtonIcon(Drawable icon) {
-        if (ibRightButton != null) {
-            ibRightButton.setImageDrawable(icon);
+            hideRightButton();
         }
     }
 
     public void showSearchView() {
-        if (etSearchView != null)
-            etSearchView.setVisibility(VISIBLE);
-
+        etSearch.setVisibility(VISIBLE);
     }
 
-
     public void hideSearchView() {
-        if (etSearchView != null)
-            etSearchView.setVisibility(INVISIBLE);
+        etSearch.setVisibility(INVISIBLE);
     }
 
     public void showTitleView() {
-        if (tvTitle != null)
-            tvTitle.setVisibility(VISIBLE);
+        tvTitle.setVisibility(VISIBLE);
     }
 
 
     public void hideTitleView() {
-        if (tvTitle != null)
-            tvTitle.setVisibility(INVISIBLE);
+        tvTitle.setVisibility(INVISIBLE);
     }
 
     @Override
@@ -102,14 +89,21 @@ public class CnToolbar extends Toolbar {
 
     @Override
     public void setTitle(CharSequence title) {
-        initViews();
-        if (tvTitle != null) {
-            tvTitle.setText(title);
-            showTitleView();
-        }
+        tvTitle.setText(title);
+        showTitleView();
     }
 
-    public void setRightButtonOnClickListener(OnClickListener onClickListener) {
-        ibRightButton.setOnClickListener(onClickListener);
+    public Button getRightButton() {
+        return btnRight;
     }
+
+    public void showRightButton() {
+        btnRight.setVisibility(VISIBLE);
+    }
+
+
+    public void hideRightButton() {
+        btnRight.setVisibility(INVISIBLE);
+    }
+
 }

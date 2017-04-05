@@ -9,7 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
+import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.bean.Wares;
+import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -24,17 +29,11 @@ import eu.davidea.viewholders.FlexibleViewHolder;
  * Created by CWQ on 2017/3/15.
  */
 
-public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> {
+public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> implements View.OnClickListener {
 
-    private Context context;
     private Wares wares;
 
     public HotWaresItem(Wares wares) {
-        this.wares = wares;
-    }
-
-    public HotWaresItem(Context context, Wares wares) {
-        this.context = context;
         this.wares = wares;
     }
 
@@ -51,7 +50,7 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> {
 
     @Override
     public Holder createViewHolder(FlexibleAdapter adapter, LayoutInflater inflater, ViewGroup parent) {
-        return new Holder(LayoutInflater.from(context).inflate(getLayoutRes(), parent, false), adapter);
+        return new Holder(inflater.inflate(getLayoutRes(), parent, false), adapter);
     }
 
 
@@ -60,9 +59,16 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> {
         holder.ivPic.setImageURI(Uri.parse(wares.getImgUrl()));
         holder.tvTitle.setText(wares.getName());
         holder.tvPrice.setText("" + wares.getPrice());
+        holder.btnBuy.setOnClickListener(this);
     }
 
-    static final class Holder extends FlexibleViewHolder {
+    @Override
+    public void onClick(View v) {
+        new CartBiz().put(convertData(wares));
+        ToastyUtils.success(UiUtils.getString(R.string.add_shopping_cart_success));
+    }
+
+    class Holder extends FlexibleViewHolder {
 
         @BindView(R.id.iv_pic)
         SimpleDraweeView ivPic;
@@ -77,6 +83,18 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> {
             super(view, adapter);
 
             ButterKnife.bind(this, view);
+
         }
+
+    }
+
+    private ShoppingCart convertData(Wares wares) {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setId(wares.getId());
+        cart.setDescription(wares.getDescription());
+        cart.setImgUrl(wares.getImgUrl());
+        cart.setName(wares.getName());
+        cart.setPrice(wares.getPrice());
+        return cart;
     }
 }

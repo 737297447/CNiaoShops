@@ -14,7 +14,7 @@ public class DialogUtils {
     public static MaterialDialog.Builder newBuilder(Context context) {
         return new MaterialDialog.Builder(context)
                 .titleColorRes(R.color.def_text_black)
-                .contentColorRes(R.color.def_text_black)
+                .contentColorRes(R.color.def_text_mid)
                 .widgetColorRes(R.color.colorAccent)
                 .canceledOnTouchOutside(false);
 

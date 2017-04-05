@@ -75,7 +75,7 @@ public class ProgressItem extends AbstractFlexibleItem<ProgressItem.Holder> {
                 holder.tvFail.setVisibility(View.INVISIBLE);
                 holder.tvFinish.setVisibility(View.INVISIBLE);
                 break;
-            case ON_FINISH:
+            case ON_EMPTY:
                 holder.progressBar.setVisibility(View.INVISIBLE);
                 holder.tvFail.setVisibility(View.INVISIBLE);
                 holder.tvFinish.setVisibility(View.VISIBLE);

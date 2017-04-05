@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.UiUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 

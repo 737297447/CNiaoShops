@@ -3,6 +3,7 @@ package com.chhd.cniaoshops.ui.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +13,10 @@ import android.widget.LinearLayout;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Page;
+import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.bean.Wares;
+import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.global.Constant;
 import com.chhd.cniaoshops.http.OnResponse;
 import com.chhd.cniaoshops.ui.StatusEnum;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
@@ -21,7 +25,7 @@ import com.chhd.cniaoshops.ui.base.BaseFragment;
 import com.chhd.cniaoshops.ui.items.HotWaresItem;
 import com.chhd.cniaoshops.ui.items.ProgressItem;
 import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.cniaoshops.util.UiUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.google.gson.Gson;
@@ -45,7 +49,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 /**
  * Created by CWQ on 2016/10/24.
  */
-public class HotFragment extends BaseFragment {
+public class HotFragment extends Fragment implements Constant {
 
     @BindView(R.id.refresh_layout)
     MaterialRefreshLayout refreshLayout;
@@ -64,18 +68,30 @@ public class HotFragment extends BaseFragment {
     private StatusEnum state = StatusEnum.ON_NORMAL;
     private ProgressItem progressItem;
 
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = View.inflate(getActivity(), R.layout.fragment_hot, null);
+        View view = inflater.inflate(R.layout.fragment_hot, container, false);
 
         ButterKnife.bind(this, view);
 
-        refreshLayout.setSunStyle(true);
+        initView();
+
+        return view;
+    }
+
+
+    private void initView() {
         refreshLayout.setMaterialRefreshListener(materialRefreshListener);
-        refreshLayout.autoRefresh();
         refreshLayout.setProgressColors(getProgressColors());
+        refreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.autoRefresh();
+            }
+        });
 
         adatper = new HotWaresAdapter(items);
         progressItem = new ProgressItem(adatper, onClickListener);
@@ -86,18 +102,20 @@ public class HotFragment extends BaseFragment {
         recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(10), true));
 
         adatper.setFastScroller(fastScroller, UiUtils.getColor(R.color.colorAccent));//Setup FastScroller after the Adapter has been added to the RecyclerView.
-//        adatper.toggleFastScroller();
-
-        return view;
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            progressItem.setStatus(StatusEnum.ON_LOAD_MORE);
-            loadMoreData();
+            switch (v.getId()) {
+                case R.id.tv_error:
+                    progressItem.setStatus(StatusEnum.ON_LOAD_MORE);
+                    loadMoreData();
+                    break;
+            }
         }
     };
+
 
     private int[] getProgressColors() {
 
@@ -178,6 +196,10 @@ public class HotFragment extends BaseFragment {
 
                     showData(page);
 
+                    if (items.size() == 0) {
+
+                    }
+
                 } catch (Exception e) {
                     LoggerUtils.e(e, response);
                 }
@@ -238,7 +260,7 @@ public class HotFragment extends BaseFragment {
             case ON_NORMAL: {
                 items.clear();
                 for (Wares wares : page.getList()) {
-                    HotWaresItem item = new HotWaresItem(getActivity(), wares);
+                    HotWaresItem item = new HotWaresItem(wares);
                     items.add(item);
                 }
                 adatper.notifyDataSetChanged();
@@ -247,7 +269,7 @@ public class HotFragment extends BaseFragment {
             case ON_LOAD_MORE: {
                 final List<AbstractFlexibleItem> newItems = new ArrayList<>();
                 for (Wares wares : page.getList()) {
-                    HotWaresItem item = new HotWaresItem(getActivity(), wares);
+                    HotWaresItem item = new HotWaresItem(wares);
                     newItems.add(item);
                 }
 
@@ -255,7 +277,7 @@ public class HotFragment extends BaseFragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            progressItem.setStatus(StatusEnum.ON_FINISH);
+                            progressItem.setStatus(StatusEnum.ON_EMPTY);
                             adatper.onLoadMoreComplete(newItems, 2000);
                         }
                     }, 500);

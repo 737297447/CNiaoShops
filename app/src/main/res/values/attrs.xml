@@ -6,4 +6,10 @@
         <attr name="isShowSearchView" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="NumberAddSubView">
+        <attr name="value" format="integer|reference" />
+        <attr name="min_value" format="integer|reference" />
+        <attr name="max_value" format="integer|reference" />
+    </declare-styleable>
+
 </resources>

@@ -7,6 +7,6 @@ package com.chhd.cniaoshops.ui;
 public enum StatusEnum {
     ON_NORMAL,
     ON_LOAD_MORE,
-    ON_FINISH,
+    ON_EMPTY,
     ON_ERROR
 }

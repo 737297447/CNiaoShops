@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorAccent">
 
     <EditText
-        android:id="@+id/toolbar_searchview"
+        android:id="@+id/et_search"
         style="@style/SearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center"
-        android:drawableLeft="@mipmap/icon_search"
-        android:gravity="center"
-        android:hint="请输入搜索内容"
-        android:textCursorDrawable="@drawable/shape_et_cursor_searchview"
-        android:textSize="@dimen/text_size_normal"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/toolbar_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:hint="@string/please_input_search_content"
         android:textSize="@dimen/text_size_normal"
         android:visibility="invisible" />
 
-    <ImageButton
-        android:id="@+id/toolbar_rightButton"
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_big"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btn_right"
+        style="?attr/actionModeCloseButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal"
         android:visibility="invisible" />
 
 </RelativeLayout>

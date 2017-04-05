@@ -11,4 +11,14 @@
     <string name="no_to_more">没有更多数据</string>
     <string name="load_fail">加载失败</string>
     <string name="please_waiting">请稍等...</string>
+    <string name="loading">努力加载中...</string>
+    <string name="please_connect_network">请连接网络，点击屏幕尝试连接</string>
+    <string name="all_select">全选</string>
+    <string name="go_settlement">去结算</string>
+    <string name="add_shopping_cart_success">加入购物车成功</string>
+    <string name="delete">删除</string>
+    <string name="please_input_search_content">请输入搜索内容</string>
+    <string name="edit">编辑</string>
+    <string name="complete">完成</string>
+    <string name="total">合计：￥ %s</string>
 </resources>

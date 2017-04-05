@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.chhd.cniaoshops.bean.User;
+import com.chhd.per_library.global.BaseApplication;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lzy.okgo.OkGo;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -14,16 +15,13 @@ import java.util.logging.Level;
 /**
  * Created by CWQ on 2016/10/24.
  */
-public class AppApplication extends Application implements Constant {
+public class AppApplication extends BaseApplication implements Constant {
 
-    public static Context context;
-    public static boolean isHotRun = false;
+    public static boolean isHotRun = true;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        context = this;
 
         NoHttp.Config config = new NoHttp.Config()
                 .setConnectTimeout(TIME_OUT)

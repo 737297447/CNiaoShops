@@ -18,5 +18,6 @@
     <color name="red_btn_normal">#ff5454</color>
     <color name="red_btn_pressed">#ff3454</color>
     <color name="gray_toolbar_text_hint">#EEE</color>
+    <color name="gray_shopping_cart_bottom">#9997a7a7</color>
 
 </resources>

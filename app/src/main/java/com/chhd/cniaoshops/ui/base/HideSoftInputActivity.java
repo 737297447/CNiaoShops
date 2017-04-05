@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class HideSoftInputActivity extends BaseActivity {
+public abstract class HideSoftInputActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

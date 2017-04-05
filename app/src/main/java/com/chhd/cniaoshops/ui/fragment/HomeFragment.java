@@ -20,7 +20,7 @@ import com.chhd.cniaoshops.http.OnResponse;
 import com.chhd.cniaoshops.ui.adapter.HomeCategoryAdapter;
 import com.chhd.cniaoshops.ui.base.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
-import com.chhd.cniaoshops.util.UiUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -59,19 +59,19 @@ public class HomeFragment extends BaseFragment {
     private View empty;
     private SliderLayout sliderLayout;
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public int getLayoutResID() {
+        return R.layout.fragment_home;
+    }
 
-        View view = View.inflate(getActivity(), R.layout.fragment_home, null);
-
-        ButterKnife.bind(this, view);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         initView();
 
         refresh();
-
-        return view;
     }
 
     private void requestHomeCampaign() {
@@ -89,17 +89,30 @@ public class HomeFragment extends BaseFragment {
                 }.getType();
                 List<HomeCampaign> list = new Gson().fromJson(response.get(), type);
                 showHomeCampaign(list);
+                adapter.setCustomEmptyView(recyclerView);
+            }
+
+            @Override
+            public void failed(int what, Response<String> response) {
+                super.failed(what, response);
+                adapter.setCustomEmptyView(recyclerView, networkErrorClickListener);
             }
 
             @Override
             public void finish(int what) {
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
-                    adapter.setCustomEmptyView(recyclerView);
                 }
             }
         });
     }
+
+    private View.OnClickListener networkErrorClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            refresh();
+        }
+    };
 
     private void showHomeCampaign(List<HomeCampaign> homeCampaigns) {
         for (int i = 0; i < homeCampaigns.size(); i++) {
@@ -113,42 +126,6 @@ public class HomeFragment extends BaseFragment {
         instance.campaigns.addAll(homeCampaigns);
         adapter.notifyDataSetChanged();
     }
-
-//    private void requestBannerImages() {
-//
-//        String url = "http://112.124.22.238:8081/course_api/banner/query";
-//
-//        OkHttpClient client = new OkHttpClient();
-//
-//        RequestBody body = new FormBody
-//                .Builder()
-//                .add("type", "1")
-//                .build();
-//
-//        Request request = new Request
-//                .Builder()
-//                .url(url)
-//                .post(body)
-//                .build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                LoggerUtils.e(e);
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    String json = response.body().string();
-//                    Type type = new TypeToken<List<Banner>>() {
-//                    }.getType();
-//                    banners = new Gson().fromJson(json, type);
-//                }
-//            }
-//        });
-//    }
 
     private void initView() {
 

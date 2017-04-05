@@ -22,9 +22,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-
-        ButterKnife.bind(this);
 
         if (AppApplication.isHotRun) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -33,6 +30,11 @@ public class SplashActivity extends BaseActivity {
         } else {
             init();
         }
+    }
+
+    @Override
+    public int getLayoutResID() {
+        return R.layout.activity_splash;
     }
 
     @Override

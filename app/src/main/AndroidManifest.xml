@@ -2,14 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chhd.cniaoshops">
 
-    <!-- NoHttp -->
+    <!-- NoHttp 权限-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- NoHttp 权限 -->
 
-    <!-- NoHttp -->
+    <!--APP-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--APP-->
+
     <application
         android:name=".global.AppApplication"
         android:allowBackup="true"

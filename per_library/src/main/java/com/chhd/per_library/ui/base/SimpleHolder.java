@@ -10,8 +10,8 @@ import butterknife.ButterKnife;
 
 public class SimpleHolder {
 
-    public SimpleHolder(View convertView) {
-        ButterKnife.bind(this, convertView);
+    public SimpleHolder(View itemView) {
+        ButterKnife.bind(this, itemView);
     }
 
 }

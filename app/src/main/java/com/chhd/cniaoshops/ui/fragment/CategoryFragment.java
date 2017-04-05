@@ -1,5 +1,6 @@
 package com.chhd.cniaoshops.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -27,7 +28,7 @@ import com.chhd.cniaoshops.ui.adapter.WaresAdapter;
 import com.chhd.cniaoshops.ui.base.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.GridSpaceItemDecoration;
 import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.cniaoshops.util.UiUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -36,6 +37,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.request.BaseRequest;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.CacheMode;
@@ -64,6 +66,8 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
     TwinklingRefreshLayout refreshLayout;
     @BindView(R.id.rv_wares)
     RecyclerView rvWares;
+    @BindView(R.id.loading_view)
+    View loadingView;
 
     private List<Category> categories = new ArrayList<>();
     private CategoryAdapter categoryAdapter;
@@ -75,19 +79,18 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
     private StatusEnum state;
     private int curIndex = 0;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public int getLayoutResID() {
+        return R.layout.fragment_category;
+    }
 
-        View view = View.inflate(getActivity(), R.layout.fragment_category, null);
-
-        ButterKnife.bind(this, view);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         initView();
 
         requestCategoryData();
-
-        return view;
     }
 
     private void initView() {
@@ -125,7 +128,6 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
             public void failed(int what, com.yanzhenjie.nohttp.rest.Response<String> response) {
                 super.failed(what, response);
                 waresList.clear();
-                waresAdapter.notifyDataSetChanged();
                 fail();
             }
 
@@ -133,7 +135,6 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
             public void finish(int what) {
                 super.finish(what);
                 refreshLayout.finishRefreshing();
-                waresAdapter.setCustomEmptyView(rvWares);
             }
         });
     }
@@ -199,7 +200,13 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         OkGo
                 .post(url)
-                .execute(new SimpleCallback(getActivity()) {
+                .execute(new SimpleCallback() {
+
+                    @Override
+                    public void before(BaseRequest request) {
+                        super.before(request);
+                        loadingView.setVisibility(View.VISIBLE);
+                    }
 
                     @Override
                     public void success(String s, Call call, Response response) {
@@ -219,12 +226,16 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+
+                                loadingView.setVisibility(View.GONE);
+
                                 int visibility = categories.isEmpty() ? View.VISIBLE : View.INVISIBLE;
                                 emptyView.setVisibility(visibility);
 
                                 if (!categories.isEmpty()) {
                                     initWaresLayout();
                                 }
+
                             }
                         }, DELAYMILLIS_FOR_SHOW_EMPTY);
                     }

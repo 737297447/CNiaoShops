@@ -13,12 +13,15 @@ import android.widget.TextView;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.base.HideSoftInputActivity;
 import com.chhd.cniaoshops.bean.Tab;
+import com.chhd.cniaoshops.ui.fragment.CartFragment;
 import com.chhd.cniaoshops.ui.fragment.CategoryFragment;
 import com.chhd.cniaoshops.ui.fragment.HomeFragment;
 import com.chhd.cniaoshops.ui.fragment.HotFragment;
 import com.chhd.cniaoshops.ui.fragment.MineFragment;
 import com.chhd.cniaoshops.global.AppApplication;
+import com.chhd.cniaoshops.ui.widget.CnToolbar;
 import com.chhd.cniaoshops.ui.widget.FragmentTabHost;
+import com.chhd.cniaoshops.util.LoggerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +42,6 @@ public class MainActivity extends HideSoftInputActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        ButterKnife.bind(this);
 
         context = this;
 
@@ -52,6 +52,12 @@ public class MainActivity extends HideSoftInputActivity {
     }
 
 
+    @Override
+    public int getLayoutResID() {
+        return R.layout.activity_main;
+    }
+
+
     private void initTab() {
 
         tabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
@@ -59,7 +65,7 @@ public class MainActivity extends HideSoftInputActivity {
         tabs.add(new Tab(R.drawable.selector_icon_home, getString(R.string.tab_home), HomeFragment.class));
         tabs.add(new Tab(R.drawable.selector_icon_hot, getString(R.string.tab_hot), HotFragment.class));
         tabs.add(new Tab(R.drawable.selector_icon_category, getString(R.string.tab_classification), CategoryFragment.class));
-        tabs.add(new Tab(R.drawable.selector_icon_cart, getString(R.string.tab_shopping_cart), CategoryFragment.class));
+        tabs.add(new Tab(R.drawable.selector_icon_cart, getString(R.string.tab_shopping_cart), CartFragment.class));
         tabs.add(new Tab(R.drawable.selector_icon_mine, getString(R.string.tab_me), MineFragment.class));
 
         for (Tab tab : tabs) {
