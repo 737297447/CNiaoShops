@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/material_dialogs_core/material_dialogs_core.iml" filepath="$PROJECT_DIR$/material_dialogs_core/material_dialogs_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/per_library/per_library.iml" filepath="$PROJECT_DIR$/per_library/per_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/toasty/toasty.iml" filepath="$PROJECT_DIR$/toasty/toasty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/x_refresh_view/x_refresh_view.iml" filepath="$PROJECT_DIR$/x_refresh_view/x_refresh_view.iml" />
     </modules>
   </component>
 </project>

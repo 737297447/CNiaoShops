@@ -5,27 +5,24 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.biz.CartBiz;
 import com.chhd.cniaoshops.ui.adapter.CartAdapter;
-import com.chhd.cniaoshops.ui.base.BaseFragment;
+import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.widget.CnToolbar;
+import com.chhd.cniaoshops.util.DialogUtils;
 import com.chhd.per_library.util.UiUtils;
-import com.liaoinstan.springview.container.AliHeader;
 import com.liaoinstan.springview.container.DefaultHeader;
-import com.liaoinstan.springview.container.MeituanHeader;
 import com.liaoinstan.springview.widget.SpringView;
-import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -72,9 +69,6 @@ public class CartFragment extends BaseFragment {
 
         initActionBar(false);
 
-        showData();
-
-        showTotalPrice();
     }
 
     private void initView() {
@@ -93,23 +87,33 @@ public class CartFragment extends BaseFragment {
         View footerView = new View(getActivity());
         footerView.setLayoutParams(params);
 
-        adapter = new CartAdapter(carts, onClickListener);
+        adapter = new CartAdapter(rvShoppingcart, carts, onClickListener);
         adapter.addFooterView(footerView);
         adapter.setOnItemChildClickListener(onItemChildClickListener);
+        adapter.setOnItemChildLongClickListener(onItemChildLongClickListener);
 
         rvShoppingcart.setAdapter(adapter);
         rvShoppingcart.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvShoppingcart.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                SwipeMenuLayout viewCache = new SwipeMenuLayout(getActivity()).getViewCache();
-                if (viewCache != null) {
-                    viewCache.smoothClose();
-                }
-                return false;
-            }
-        });
+
     }
+
+    private BaseQuickAdapter.OnItemChildLongClickListener onItemChildLongClickListener = new BaseQuickAdapter.OnItemChildLongClickListener() {
+        @Override
+        public void onItemChildLongClick(final BaseQuickAdapter adapter, View view, int position) {
+            final int pos = position;
+            DialogUtils
+                    .newBuilder(getActivity())
+                    .items(getString(R.string.delete))
+                    .itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                            new CartBiz().delete(carts.get(pos));
+                            adapter.remove(pos);
+                        }
+                    })
+                    .show();
+        }
+    };
 
     private SpringView.OnFreshListener onFreshListener = new SpringView.OnFreshListener() {
         @Override
@@ -117,6 +121,7 @@ public class CartFragment extends BaseFragment {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    showData();
                     springView.onFinishFreshAndLoad();
                 }
             }, DELAYMILLIS_FOR_RQUEST_FINISH);
@@ -243,6 +248,8 @@ public class CartFragment extends BaseFragment {
         carts.clear();
         carts.addAll(new CartBiz().getAll());
         adapter.notifyDataSetChanged();
+        adapter.setCustomEmptyView();
+        showTotalPrice();
     }
 
     @OnClick({R.id.check_box, R.id.btn_settlement})
@@ -278,6 +285,7 @@ public class CartFragment extends BaseFragment {
                 int position = carts.indexOf(cart);
                 iterator.remove();
                 adapter.notifyItemRemoved(position);
+                new CartBiz().delete(cart);
             }
         }
     }

@@ -1,15 +1,20 @@
 package com.chhd.cniaoshops.ui.adapter;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.ui.base.SimpleAdapter;
-import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.ui.activity.WaresDetailActivity;
+import com.chhd.cniaoshops.ui.base.adapter.SimpleAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,13 +28,13 @@ import butterknife.ButterKnife;
 
 public class WaresAdapter extends SimpleAdapter<Wares, BaseViewHolder> {
 
-    public WaresAdapter(List<Wares> data) {
-        super(R.layout.grid_item_wares, data);
+    public WaresAdapter(RecyclerView recyclerView, int layoutResId, List<Wares> data) {
+        super(recyclerView, layoutResId, data);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, Wares item) {
-        Holder holder = new Holder(helper.itemView);
+        Holder holder = new Holder(helper.itemView, helper.getAdapterPosition());
         Picasso
                 .with(mContext)
                 .load(item.getImgUrl())
@@ -38,7 +43,7 @@ public class WaresAdapter extends SimpleAdapter<Wares, BaseViewHolder> {
         holder.tvPrice.setText(String.format("￥%.2f", item.getPrice()));
     }
 
-    class Holder {
+    class Holder implements View.OnClickListener {
 
         @BindView(R.id.iv_pic)
         ImageView ivPic;
@@ -46,9 +51,30 @@ public class WaresAdapter extends SimpleAdapter<Wares, BaseViewHolder> {
         TextView tvName;
         @BindView(R.id.tv_price)
         TextView tvPrice;
+        @BindView(R.id.btn_buy)
+        Button btnBuy;
 
-        public Holder(View itemView) {
+        private int pos;
+
+        public Holder(View itemView, int pos) {
             ButterKnife.bind(this, itemView);
+            this.pos = pos;
+            btnBuy.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_buy:
+                    new CartBiz().put(getData().get(pos));
+                    break;
+                default:
+                    Intent intent = new Intent(mContext, WaresDetailActivity.class);
+                    intent.putExtra("wares", getData().get(pos));
+                    mContext.startActivity(intent);
+                    break;
+            }
         }
     }
 }

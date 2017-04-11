@@ -1,35 +1,31 @@
 package com.chhd.cniaoshops.ui.fragment;
 
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Page;
-import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.biz.CartBiz;
 import com.chhd.cniaoshops.global.Constant;
 import com.chhd.cniaoshops.http.OnResponse;
 import com.chhd.cniaoshops.ui.StatusEnum;
+import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
 import com.chhd.cniaoshops.ui.adapter.HotWaresAdapter;
-import com.chhd.cniaoshops.ui.base.BaseFragment;
 import com.chhd.cniaoshops.ui.items.HotWaresItem;
 import com.chhd.cniaoshops.ui.items.ProgressItem;
+import com.chhd.cniaoshops.ui.widget.EmptyView;
 import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.util.UiUtils;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -41,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import eu.davidea.fastscroller.FastScroller;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
@@ -49,7 +44,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 /**
  * Created by CWQ on 2016/10/24.
  */
-public class HotFragment extends Fragment implements Constant {
+public class HotFragment extends BaseFragment implements Constant {
 
     @BindView(R.id.refresh_layout)
     MaterialRefreshLayout refreshLayout;
@@ -58,7 +53,7 @@ public class HotFragment extends Fragment implements Constant {
     @BindView(R.id.fast_scroller)
     FastScroller fastScroller;
     @BindView(R.id.empty_view)
-    LinearLayout emptyView;
+    EmptyView emptyView;
 
     private List<AbstractFlexibleItem> items = new ArrayList<>();
     private HotWaresAdapter adatper;
@@ -69,29 +64,21 @@ public class HotFragment extends Fragment implements Constant {
     private ProgressItem progressItem;
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_hot, container, false);
-
-        ButterKnife.bind(this, view);
-
-        initView();
-
-        return view;
+    public int getLayoutResID() {
+        return R.layout.fragment_hot;
     }
 
+    @Override
+    protected void createView() {
+        super.createView();
+        initView();
+        refresh();
+    }
 
     private void initView() {
         refreshLayout.setMaterialRefreshListener(materialRefreshListener);
         refreshLayout.setProgressColors(getProgressColors());
-        refreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                refreshLayout.autoRefresh();
-            }
-        });
 
         adatper = new HotWaresAdapter(items);
         progressItem = new ProgressItem(adatper, onClickListener);
@@ -99,9 +86,18 @@ public class HotFragment extends Fragment implements Constant {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adatper);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(10), true));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(WARES_DIMEN_NORMAL), true));
 
         adatper.setFastScroller(fastScroller, UiUtils.getColor(R.color.colorAccent));//Setup FastScroller after the Adapter has been added to the RecyclerView.
+    }
+
+    private void refresh() {
+        refreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.autoRefresh();
+            }
+        });
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -163,15 +159,15 @@ public class HotFragment extends Fragment implements Constant {
     private void refreshData() {
         curPage = 1;
         state = StatusEnum.ON_NORMAL;
-        requestGetData();
+        requestData();
     }
 
     private void loadMoreData() {
         state = StatusEnum.ON_LOAD_MORE;
-        requestGetData();
+        requestData();
     }
 
-    private void requestGetData() {
+    private void requestData() {
 
         String url = SERVER_URL + "wares/hot";
 
@@ -185,21 +181,13 @@ public class HotFragment extends Fragment implements Constant {
             @Override
             public void succeed(int what, Response<String> response) {
                 try {
+                    curPage = ++curPage;
                     Type type = new TypeToken<Page<Wares>>() {
                     }.getType();
                     Page<Wares> page = new Gson().fromJson(response.get(), type);
-
-                    curPage = page.getCurrentPage();
                     totalPage = page.getTotalPage();
-
-                    curPage = ++curPage;
-
                     showData(page);
-
-                    if (items.size() == 0) {
-
-                    }
-
+                    emptyView.setEmptyView(items);
                 } catch (Exception e) {
                     LoggerUtils.e(e, response);
                 }
@@ -207,23 +195,21 @@ public class HotFragment extends Fragment implements Constant {
 
             @Override
             public void failed(int what, Response<String> response) {
+                super.failed(what, response);
                 fail();
+                emptyView.setEmptyView(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        requestData();
+                    }
+                });
             }
 
             @Override
             public void finish(int what) {
                 finishRefresh();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        int visibility = items.size() == 0 ? View.VISIBLE : View.INVISIBLE;
-                        emptyView.setVisibility(visibility);
-                    }
-                }, DELAYMILLIS_FOR_SHOW_EMPTY);
             }
         });
-
     }
 
     private void finishRefresh() {
@@ -238,10 +224,8 @@ public class HotFragment extends Fragment implements Constant {
     }
 
     private void fail() {
-
         switch (state) {
             case ON_NORMAL:
-
                 break;
             case ON_LOAD_MORE:
                 new Handler().postDelayed(new Runnable() {
@@ -260,7 +244,7 @@ public class HotFragment extends Fragment implements Constant {
             case ON_NORMAL: {
                 items.clear();
                 for (Wares wares : page.getList()) {
-                    HotWaresItem item = new HotWaresItem(wares);
+                    HotWaresItem item = new HotWaresItem(getActivity(), wares);
                     items.add(item);
                 }
                 adatper.notifyDataSetChanged();
@@ -269,7 +253,7 @@ public class HotFragment extends Fragment implements Constant {
             case ON_LOAD_MORE: {
                 final List<AbstractFlexibleItem> newItems = new ArrayList<>();
                 for (Wares wares : page.getList()) {
-                    HotWaresItem item = new HotWaresItem(wares);
+                    HotWaresItem item = new HotWaresItem(getActivity(), wares);
                     newItems.add(item);
                 }
 

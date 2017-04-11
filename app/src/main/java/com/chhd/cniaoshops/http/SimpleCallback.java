@@ -6,12 +6,15 @@ import android.os.Handler;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.R;
+import com.chhd.cniaoshops.global.Config;
 import com.chhd.cniaoshops.global.Constant;
 import com.chhd.cniaoshops.util.DialogUtils;
 import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.cniaoshops.util.ToastyUtils;
 import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.request.BaseRequest;
+import com.orhanobut.logger.Logger;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -27,6 +30,8 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
     private long startTimeMillis;
     private Context progressDialog;
     private MaterialDialog dialog;
+    private HttpParams params;
+    private String url;
 
     public SimpleCallback() {
     }
@@ -44,19 +49,21 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
     }
 
     @Override
-    public void onBefore(BaseRequest request) {
+    public final void onBefore(BaseRequest request) {
         super.onBefore(request);
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
             dialog = DialogUtils.newProgressDialog(progressDialog);
             dialog.show();
         }
+        url = request.getUrl();
+        params = request.getParams();
         before(request);
     }
 
     @Override
-    public void onSuccess(final String s, final Call call, final Response response) {
-        LoggerUtils.d(response, s);
+    public final void onSuccess(final String s, final Call call, final Response response) {
+        d(url, params, s);
         long timeDif = getTimeDif();
         if (timeDif > delayMillis) {
             success(s, call, response);
@@ -71,9 +78,9 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
     }
 
     @Override
-    public void onError(final Call call, final Response response, final Exception e) {
+    public final void onError(final Call call, final Response response, final Exception e) {
         super.onError(call, response, e);
-        LoggerUtils.e(e);
+        e(url, params, response, e);
         long timeDif = getTimeDif();
         if (timeDif > delayMillis) {
             error(call, response, e);
@@ -88,7 +95,7 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
     }
 
     @Override
-    public void onAfter(final String s, final Exception e) {
+    public final void onAfter(final String s, final Exception e) {
         super.onAfter(s, e);
         long timeDif = getTimeDif();
         if (timeDif > delayMillis) {
@@ -126,4 +133,61 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
     public void after(String s, Exception e) {
 
     }
+
+    /**
+     * 打印OKGO请求成功信息
+     *
+     * @param url
+     * @param params
+     * @param json
+     */
+    private void d(String url, HttpParams params, String json) {
+        if (Config.isDebug) {
+            String paramsStr = params != null ? "params:\t" + formatParamsStr(params.toString()) + "\n\n" : "";
+            String message =
+                    "url:\t\t" + url
+                            + "\n\n"
+                            + paramsStr
+                            + "json:\t" + json;
+            Logger.d(message);
+        }
+    }
+
+
+    /**
+     * 打印OKGO请求失败信息
+     *
+     * @param url
+     * @param params
+     * @param throwable
+     */
+    private void e(String url, HttpParams params, Response response, Throwable throwable) {
+        if (Config.isDebug) {
+            String paramsStr = params != null ? "params:\t" + formatParamsStr(params.toString()) + "\n\n" : "";
+            String responseCode = response != null ? "responseCode:\t" + response.code() + "\n\n" : "";
+            String xml = response != null ? "xml:\t" + getXml(response) + "\n\n" : "";
+            String message =
+                    "url:\t\t" + url
+                            + "\n\n"
+                            + paramsStr
+                            + responseCode
+                            + xml
+                            + ERROR;
+            Logger.e(throwable, message);
+        }
+    }
+
+    private String formatParamsStr(String params) {
+        return params.replace("[", "").replace("]", "").replace("&", "\n" + "params:\t");
+    }
+
+    private String getXml(Response response) {
+        try {
+            return response.body().string();
+        } catch (Exception e) {
+            LoggerUtils.e(e);
+        }
+        return "";
+    }
+
 }

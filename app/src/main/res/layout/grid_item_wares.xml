@@ -29,6 +29,7 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:lineSpacingExtra="2dp"
+                android:lines="3"
                 android:maxLines="3"
                 android:text="魅族 魅蓝Note5 全网通公开版 32GB 月光银 移动联通电信4G手机 双卡双待"
                 android:textSize="@dimen/text_size_small" />
@@ -39,8 +40,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="￥1099.00"
-                android:textColor="@color/crimson"
+                android:textColor="@color/red"
                 android:textSize="@dimen/text_size_normal" />
+
+            <Button
+                android:id="@+id/btn_buy"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/selecter_btn_style_red"
+                android:text="@string/buy_now"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_12" />
 
         </LinearLayout>
 

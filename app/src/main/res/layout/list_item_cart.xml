@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <com.mcxtzhang.swipemenulib.SwipeMenuLayout
@@ -10,8 +10,10 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/ll_content"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="10dp">
@@ -82,7 +84,7 @@
 
         <Button
             android:id="@+id/btn_delete"
-            style="?attr/borderlessButtonStyle"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/red"

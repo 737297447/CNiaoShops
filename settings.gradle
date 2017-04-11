@@ -1,1 +1,1 @@
-include ':app', ':toasty', ':per_library', ':image_slider', ':material_dialogs_core'
+include ':app', ':toasty', ':per_library', ':image_slider', ':material_dialogs_core', ':x_refresh_view'

@@ -21,7 +21,8 @@
         android:id="@android:id/tabcontent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@color/def_background" />
 
     <com.chhd.cniaoshops.ui.widget.FragmentTabHost
         android:id="@android:id/tabhost"

@@ -23,8 +23,20 @@ public class ToastyUtils {
         Toasty.success(UiUtils.getContext(), UiUtils.getString(resId), Toast.LENGTH_SHORT, true).show();
     }
 
+    public static void warning(CharSequence message) {
+        Toasty.warning(UiUtils.getContext(), message, Toast.LENGTH_SHORT, true).show();
+    }
+
+    public static void warning(int resId) {
+        Toasty.warning(UiUtils.getContext(), UiUtils.getString(resId), Toast.LENGTH_SHORT, true).show();
+    }
+
     public static void error(CharSequence message) {
         Toasty.error(UiUtils.getContext(), message, Toast.LENGTH_SHORT, true).show();
+    }
+
+    public static void error(CharSequence message, int duration) {
+        Toasty.error(UiUtils.getContext(), message, duration, true).show();
     }
 
     public static void error(int resId) {

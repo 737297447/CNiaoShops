@@ -1,18 +1,20 @@
 package com.chhd.cniaoshops.ui.adapter;
 
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.biz.CartBiz;
-import com.chhd.cniaoshops.ui.base.SimpleAdapter;
+import com.chhd.cniaoshops.ui.base.adapter.SimpleAdapter;
 import com.chhd.cniaoshops.ui.widget.NumberAddSubView;
 import com.chhd.per_library.ui.base.SimpleHolder;
+import com.squareup.picasso.Picasso;
 
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -30,8 +32,8 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart, BaseViewHolder> {
     private NumberFormat numberFormat;
     private View.OnClickListener numberViewButtonClickListener;
 
-    public CartAdapter(List<ShoppingCart> data, View.OnClickListener numberViewButtonClickListener) {
-        super(R.layout.list_item_cart, data);
+    public CartAdapter(RecyclerView recyclerView, List<ShoppingCart> data, View.OnClickListener numberViewButtonClickListener) {
+        super(recyclerView, R.layout.list_item_cart, data);
 
         this.numberViewButtonClickListener = numberViewButtonClickListener;
 
@@ -46,7 +48,7 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart, BaseViewHolder> {
 
         Holder holder = new Holder(helper.itemView);
         holder.checkBox.setChecked(item.isChecked());
-        Glide
+        Picasso
                 .with(mContext)
                 .load(item.getImgUrl())
                 .into(holder.ivPic);
@@ -70,6 +72,7 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart, BaseViewHolder> {
         });
         helper.addOnClickListener(R.id.check_box);
         helper.addOnClickListener(R.id.btn_delete);
+        helper.addOnLongClickListener(R.id.ll_content);
     }
 
     class Holder extends SimpleHolder {

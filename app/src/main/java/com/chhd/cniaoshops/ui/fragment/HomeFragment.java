@@ -1,25 +1,34 @@
 package com.chhd.cniaoshops.ui.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Banner;
+import com.chhd.cniaoshops.bean.Campaign;
 import com.chhd.cniaoshops.bean.HomeCampaign;
 import com.chhd.cniaoshops.bean.HomeCategory;
 import com.chhd.cniaoshops.biz.BannerBiz;
 import com.chhd.cniaoshops.http.OnResponse;
+import com.chhd.cniaoshops.ui.activity.WaresListActivity;
 import com.chhd.cniaoshops.ui.adapter.HomeCategoryAdapter;
-import com.chhd.cniaoshops.ui.base.BaseFragment;
+import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
+import com.chhd.cniaoshops.ui.listener.SliderClickListener;
+import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -49,8 +58,9 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    private View header;
+    private final int REQUEST_FORM_HOR_SCROLL_PIC_ACTIVITY = 100;
 
+    private View header;
     private List<HomeCategory> data = new ArrayList<>();
     private List<Banner> banners = new ArrayList<>();
     private List<HomeCampaign> campaigns = new ArrayList<>();
@@ -89,13 +99,18 @@ public class HomeFragment extends BaseFragment {
                 }.getType();
                 List<HomeCampaign> list = new Gson().fromJson(response.get(), type);
                 showHomeCampaign(list);
-                adapter.setCustomEmptyView(recyclerView);
+                adapter.setCustomEmptyView();
             }
 
             @Override
             public void failed(int what, Response<String> response) {
                 super.failed(what, response);
-                adapter.setCustomEmptyView(recyclerView, networkErrorClickListener);
+                adapter.setCustomEmptyView(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        refresh();
+                    }
+                });
             }
 
             @Override
@@ -106,13 +121,6 @@ public class HomeFragment extends BaseFragment {
             }
         });
     }
-
-    private View.OnClickListener networkErrorClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            refresh();
-        }
-    };
 
     private void showHomeCampaign(List<HomeCampaign> homeCampaigns) {
         for (int i = 0; i < homeCampaigns.size(); i++) {
@@ -152,13 +160,57 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initRecyclerView() {
-
-        adapter = new HomeCategoryAdapter(campaigns);
+        adapter = new HomeCategoryAdapter(recyclerView, campaigns);
         adapter.addHeaderView(header);
-
+        adapter.setOnItemChildClickListener(onItemChildClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(10)));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(WARES_DIMEN_NORMAL)));
+    }
+
+    private BaseQuickAdapter.OnItemChildClickListener onItemChildClickListener = new BaseQuickAdapter.OnItemChildClickListener() {
+        @Override
+        public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            rotation(view, position);
+            return false;
+        }
+    };
+
+    private void rotation(final View v, final int position) {
+        v.setEnabled(false);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(v, "rotationY", 0.0F, 180.0F).setDuration(150);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ObjectAnimator animator1 = ObjectAnimator.ofFloat(v, "rotationY", 180.0F, 0.0F).setDuration(150);
+                animator1.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        HomeCampaign campaign = campaigns.get(position);
+                        switch (v.getId()) {
+                            case R.id.iv_big:
+                                campaignClick(campaign.getCpOne());
+                                break;
+                            case R.id.iv_small_top:
+                                campaignClick(campaign.getCpTwo());
+                                break;
+                            case R.id.iv_small_bottom:
+                                campaignClick(campaign.getCpThree());
+                                break;
+                        }
+                        v.setEnabled(true);
+                    }
+                });
+                animator1.start();
+            }
+        });
+        animator.start();
+    }
+
+    private void campaignClick(Campaign campaign) {
+        Intent intent = new Intent(getActivity(), WaresListActivity.class);
+        intent.putExtra("campaignId", campaign.getId());
+        startActivity(intent);
     }
 
     private void initHomeCategory() {
@@ -198,15 +250,17 @@ public class HomeFragment extends BaseFragment {
 
         List<BaseSliderView> banners = new BannerBiz(getActivity()).getBanner();
         for (BaseSliderView bannser : banners) {
+            bannser.setOnSliderClickListener(new SliderClickListener(getActivity(), sliderLayout));
             sliderLayout.addSlider(bannser);
         }
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        sliderLayout.stopAutoCycle();
+        if (sliderLayout != null) {
+            sliderLayout.stopAutoCycle();
+        }
     }
 
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {

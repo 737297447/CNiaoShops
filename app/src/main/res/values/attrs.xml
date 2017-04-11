@@ -12,4 +12,9 @@
         <attr name="max_value" format="integer|reference" />
     </declare-styleable>
 
+    <declare-styleable name="ProgressView">
+        <attr name="progress_color" format="color" />
+        <attr name="progress" format="integer" />
+    </declare-styleable>
+
 </resources>

@@ -8,9 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <com.chhd.cniaoshops.ui.widget.SwipeDelRecyclerView
             android:id="@+id/rv_shopping_cart"
-            style="@style/HorizontalRecyclerStyle"
+            style="@style/VerRecyclerStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -20,10 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/gray_shopping_cart_bottom"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
+        android:background="@color/gray_shopping_cart_bottom"
         android:paddingRight="10dp">
 
         <CheckBox
@@ -50,7 +50,7 @@
 
         <Button
             android:id="@+id/btn_settlement"
-            style="?attr/borderlessButtonStyle"
+            style="@style/ButtonStyle"
             android:layout_width="80dp"
             android:layout_height="35dp"
             android:background="@drawable/selecter_btn_style_red"

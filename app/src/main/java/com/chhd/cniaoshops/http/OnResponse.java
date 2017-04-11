@@ -6,12 +6,18 @@ import android.os.Handler;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.R;
+import com.chhd.cniaoshops.global.Config;
 import com.chhd.cniaoshops.global.Constant;
 import com.chhd.cniaoshops.util.DialogUtils;
 import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.cniaoshops.util.ToastyUtils;
+import com.orhanobut.logger.Logger;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Response;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by CWQ on 2017/3/21.
@@ -41,7 +47,7 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     }
 
     @Override
-    public void onStart(int what) {
+    public final void onStart(int what) {
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
             dialog = DialogUtils.newProgressDialog(progressDialog);
@@ -51,8 +57,8 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     }
 
     @Override
-    public void onSucceed(final int what, final Response response) {
-        LoggerUtils.d(response);
+    public final void onSucceed(final int what, final Response response) {
+        d(response);
         long timeDif = getTimeDif();
         if (timeDif > delayMillis) {
             succeed(what, response);
@@ -67,8 +73,8 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     }
 
     @Override
-    public void onFailed(final int what, final Response response) {
-        LoggerUtils.e(response);
+    public final void onFailed(final int what, final Response response) {
+        e(response);
         long timeDif = getTimeDif();
         if (timeDif > delayMillis) {
             failed(what, response);
@@ -83,7 +89,7 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     }
 
     @Override
-    public void onFinish(final int what) {
+    public final void onFinish(final int what) {
         long timeDif = getTimeDif();
         if (timeDif > delayMillis) {
             finish(what);
@@ -120,5 +126,47 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     }
 
     public void finish(int what) {
+    }
+
+    /**
+     * 打印NOHttp请求成功信息
+     *
+     * @param response
+     */
+    private void d(Response<?> response) {
+        if (Config.isDebug) {
+            Set<Map.Entry<String, List<Object>>> entries = response.request().getParamKeyValues().entrySet();
+            String params = entries.isEmpty() ? "" : "params:\t" + formatParamsStr(entries) + "\n\n";
+            String message =
+                    "url:\t\t" + response.request().url()
+                            + "\n\n"
+                            + params
+                            + "json:\t" + response.get();
+            Logger.d(message);
+        }
+    }
+
+    /**
+     * 打印NOHttp请求失败信息
+     *
+     * @param response
+     */
+    private void e(Response<?> response) {
+        if (Config.isDebug) {
+            Set<Map.Entry<String, List<Object>>> entries = response.request().getParamKeyValues().entrySet();
+            String params = entries.isEmpty() ? "" : "params:\t" + formatParamsStr(entries) + "\n\n";
+            String message =
+                    "url:\t\t" + response.request().url()
+                            + "\n\n"
+                            + params
+                            + "xml:\t" + response.get()
+                            + "\n\n"
+                            + "error";
+            Logger.e(response.getException(), message);
+        }
+    }
+
+    private String formatParamsStr(Set<Map.Entry<String, List<Object>>> entries) {
+        return entries.toString().replace("[", "").replace("]", "").replace(", ", "\n" + "params:\t");
     }
 }

@@ -6,18 +6,25 @@ import android.os.Bundle;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.chhd.cniaoshops.R;
-import com.chhd.cniaoshops.ui.base.BaseActivity;
+import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.global.AppApplication;
+import com.chhd.cniaoshops.util.LoggerUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.BindViews;
-import butterknife.ButterKnife;
 
 public class SplashActivity extends BaseActivity {
 
-    @BindViews({R.id.animation_view_0, R.id.animation_view_1, R.id.animation_view_2})
-    List<LottieAnimationView> animationViews;
+    @BindView(R.id.animation_view_0)
+    LottieAnimationView emojiView;
+    @BindViews({
+            R.id.animation_view_1, R.id.animation_view_2, R.id.animation_view_3,
+            R.id.animation_view_4, R.id.animation_view_5, R.id.animation_view_6,
+            R.id.animation_view_7
+    })
+    List<LottieAnimationView> lotterLetters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,36 +49,44 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void init() {
-
-        new Handler().postDelayed(new Runnable() {
+        new Thread() {
             @Override
             public void run() {
-                animationViews.get(1).playAnimation();
+                super.run();
+                try {
+                    for (final LottieAnimationView letter : lotterLetters) {
+                        sleep(300);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                letter.playAnimation();
+                                if (lotterLetters.indexOf(letter) == lotterLetters.size() - 1) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }, 1000);
+                                }
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    LoggerUtils.e(e);
+                }
             }
-        }, 1000);
+        }.start();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                animationViews.get(2).playAnimation();
-            }
-        }, 1500);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, 3000);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-
-        animationViews.get(1).cancelAnimation();
-        animationViews.get(2).cancelAnimation();
+    protected void onDestroy() {
+        super.onDestroy();
+        emojiView.cancelAnimation();
+        for (LottieAnimationView letter : lotterLetters) {
+            letter.cancelAnimation();
+        }
     }
 }

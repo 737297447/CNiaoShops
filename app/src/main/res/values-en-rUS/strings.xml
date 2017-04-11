@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CNiaoShops</string>
+    <string name="leak_canary_display_activity_label">CNiaoShops</string>
+    <string name="buy_now">lì jí gòu mǎi </string>
+    <string name="tab_home">shǒu yè </string>
+    <string name="tab_hot">rè mài </string>
+    <string name="tab_classification">fèn lèi </string>
+    <string name="tab_shopping_cart">gòu wù chē </string>
+    <string name="tab_me">wǒ de </string>
+    <string name="network_connect_fail">wǎng luò lián jiē shī bài </string>
+    <string name="no_more">zàn wú gèng duō shù jù </string>
+    <string name="no_to_more">méi yǒu gèng duō shù jù </string>
+    <string name="load_fail">jiā zǎi shī bài </string>
+    <string name="please_waiting">qǐng shāo děng ...</string>
+    <string name="loading">nǔ lì jiā zǎi zhōng ...</string>
+    <string name="please_connect_network">qǐng lián jiē wǎng luò ，diǎn jī píng mù cháng shì lián jiē </string>
+    <string name="all_select">quán xuǎn </string>
+    <string name="go_settlement">qù jié suàn </string>
+    <string name="add_shopping_cart_success">jiā rù gòu wù chē chéng gōng </string>
+    <string name="delete">shān chú </string>
+    <string name="please_input_search_content">qǐng shū rù sōu suǒ nèi róng </string>
+    <string name="edit">biān jí </string>
+    <string name="complete">wán chéng </string>
+    <string name="total">hé jì ：￥ %s</string>
+    <string name="wares_list">shāng pǐn liè biǎo </string>
+    <string name="grid">wǎng gé </string>
+    <string name="defualt">mò rèn </string>
+    <string name="price">jià gé </string>
+    <string name="sales_volume">xiāo liàng </string>
+    <string name="list">liè biǎo </string>
+    <string name="swipe_to_refresh">xià lā shuā xīn </string>
+    <string name="release_to_refresh">shì fàng lì jí shuā xīn </string>
+    <string name="refreshing">zhèng zài shuā xīn ...</string>
+    <string name="refresh_complete">shuā xīn chéng gōng </string>
+    <string name="swipe_to_load_more">上拉加载更多</string>
+    <string name="release_to_load_more">释放立刻加载</string>
+    <string name="loading_more">正在加载更多...</string>
+    <string name="wares_detail">商品详情</string>
+</resources>

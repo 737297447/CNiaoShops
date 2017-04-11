@@ -3,10 +3,14 @@ package com.chhd.cniaoshops.biz;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
+import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
+import com.chhd.cniaoshops.bean.Wares;
 import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
 import com.chhd.per_library.util.JsonUtils;
 import com.chhd.per_library.util.SpUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -43,6 +47,21 @@ public class CartBiz {
         }
         array.put(item.getId().intValue(), item);
         commit();
+        ToastyUtils.success(String.format("%1$s：%2$s", UiUtils.getString(R.string.add_shopping_cart_success), cart.getName()));
+    }
+
+    public void put(Wares wares) {
+        put(convertData(wares));
+    }
+
+    private ShoppingCart convertData(Wares wares) {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setId(wares.getId());
+        cart.setDescription(wares.getDescription());
+        cart.setImgUrl(wares.getImgUrl());
+        cart.setName(wares.getName());
+        cart.setPrice(wares.getPrice());
+        return cart;
     }
 
     /**

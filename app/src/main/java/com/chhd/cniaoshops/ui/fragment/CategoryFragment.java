@@ -1,18 +1,17 @@
 package com.chhd.cniaoshops.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chhd.cniaoshops.R;
@@ -25,8 +24,10 @@ import com.chhd.cniaoshops.http.SimpleCallback;
 import com.chhd.cniaoshops.ui.StatusEnum;
 import com.chhd.cniaoshops.ui.adapter.CategoryAdapter;
 import com.chhd.cniaoshops.ui.adapter.WaresAdapter;
-import com.chhd.cniaoshops.ui.base.BaseFragment;
+import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.GridSpaceItemDecoration;
+import com.chhd.cniaoshops.ui.listener.SliderClickListener;
+import com.chhd.cniaoshops.ui.widget.EmptyView;
 import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -38,6 +39,7 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.request.BaseRequest;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.CacheMode;
@@ -50,6 +52,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -61,13 +64,11 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
     @BindView(R.id.lv_category)
     ListView lvCategory;
     @BindView(R.id.empty_view)
-    View emptyView;
+    EmptyView emptyView;
     @BindView(R.id.refresh_layout)
     TwinklingRefreshLayout refreshLayout;
     @BindView(R.id.rv_wares)
     RecyclerView rvWares;
-    @BindView(R.id.loading_view)
-    View loadingView;
 
     private List<Category> categories = new ArrayList<>();
     private CategoryAdapter categoryAdapter;
@@ -78,6 +79,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
     private WaresAdapter waresAdapter;
     private StatusEnum state;
     private int curIndex = 0;
+    private SliderLayout sliderLayout;
 
     @Override
     public int getLayoutResID() {
@@ -92,6 +94,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         requestCategoryData();
     }
+
 
     private void initView() {
         categoryAdapter = new CategoryAdapter(getActivity(), categories);
@@ -115,10 +118,12 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
             @Override
             public void succeed(int what, com.yanzhenjie.nohttp.rest.Response<String> response) {
                 try {
+                    curPage = ++curPage;
                     Type type = new TypeToken<Page<Wares>>() {
                     }.getType();
                     Page<Wares> data = new Gson().fromJson(response.get(), type);
                     showWaresData(data);
+                    waresAdapter.setCustomEmptyView();
                 } catch (Exception e) {
                     LoggerUtils.e(e, response);
                 }
@@ -129,6 +134,12 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                 super.failed(what, response);
                 waresList.clear();
                 fail();
+                waresAdapter.setCustomEmptyView(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        requestWares(categories.get(curIndex).getId());
+                    }
+                });
             }
 
             @Override
@@ -159,32 +170,20 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     private void loadMoreData() {
-        curPage = ++curPage;
         state = StatusEnum.ON_LOAD_MORE;
         requestWares(categories.get(curIndex).getId());
-
     }
 
-    private void showWaresData(Page<Wares> data) {
+    private void showWaresData(Page<Wares> page) {
         switch (state) {
             case ON_NORMAL:
-                waresList.clear();
-                waresList.addAll(data.getList());
-                waresAdapter.notifyDataSetChanged();
-                waresAdapter.loadMoreComplete();
+                waresAdapter.refreshData(page.getList());
                 break;
             case ON_LOAD_MORE:
-                if (data.getList().isEmpty()) {
-                    waresAdapter.loadMoreEnd();
-                } else {
-                    waresList.addAll(data.getList());
-                    waresAdapter.notifyDataSetChanged();
-                    waresAdapter.loadMoreComplete();
-                }
+                waresAdapter.addAll(page.getList());
                 break;
         }
     }
-
     private RefreshListenerAdapter refreshListenerAdapter = new RefreshListenerAdapter() {
 
         @Override
@@ -205,7 +204,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                     @Override
                     public void before(BaseRequest request) {
                         super.before(request);
-                        loadingView.setVisibility(View.VISIBLE);
+                        emptyView.showLoadView();
                     }
 
                     @Override
@@ -216,9 +215,21 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                             List<Category> data = new Gson().fromJson(s, type);
                             categoryAdapter.notifyDataChanged(data);
                             lvCategory.setItemChecked(0, true);
+                            emptyView.setEmptyView(categories);
                         } catch (Exception e) {
                             LoggerUtils.e(e);
                         }
+                    }
+
+                    @Override
+                    public void error(Call call, Response response, Exception e) {
+                        super.error(call, response, e);
+                        emptyView.setEmptyView(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requestCategoryData();
+                            }
+                        });
                     }
 
                     @Override
@@ -226,16 +237,9 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-
-                                loadingView.setVisibility(View.GONE);
-
-                                int visibility = categories.isEmpty() ? View.VISIBLE : View.INVISIBLE;
-                                emptyView.setVisibility(visibility);
-
                                 if (!categories.isEmpty()) {
                                     initWaresLayout();
                                 }
-
                             }
                         }, DELAYMILLIS_FOR_SHOW_EMPTY);
                     }
@@ -246,7 +250,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         initSliderLayout();
 
-        waresAdapter = new WaresAdapter(waresList);
+        waresAdapter = new WaresAdapter(rvWares, R.layout.grid_item_wares, waresList);
         waresAdapter.addHeaderView(header);
         waresAdapter.setEnableLoadMore(true);
         waresAdapter.setLoadMoreView(moreView);
@@ -254,7 +258,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         rvWares.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rvWares.setAdapter(waresAdapter);
-        rvWares.addItemDecoration(new GridSpaceItemDecoration(2, UiUtils.dp2px(5), true, true));
+        rvWares.addItemDecoration(new GridSpaceItemDecoration(2, UiUtils.dp2px(WARES_DIMEN_SMALL), true, true));
 
         refreshLayout.setOnRefreshListener(refreshListenerAdapter);
         refreshLayout.startRefresh();
@@ -293,7 +297,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         header = View.inflate(getActivity(), R.layout.header_banner, null);
 
-        SliderLayout sliderLayout = ButterKnife.findById(header, R.id.slider_layout);
+        sliderLayout = ButterKnife.findById(header, R.id.slider_layout);
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sliderLayout.getLayoutParams();
         params.height = UiUtils.dp2px(150);
@@ -313,10 +317,18 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         List<BaseSliderView> banners = new BannerBiz(getActivity()).getBanner();
         for (BaseSliderView bannser : banners) {
+            bannser.setOnSliderClickListener(new SliderClickListener(getActivity(), sliderLayout));
             sliderLayout.addSlider(bannser);
         }
 
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (sliderLayout != null) {
+            sliderLayout.stopAutoCycle();
+        }
     }
 
     @Override

@@ -15,9 +15,7 @@ public class DialogUtils {
         return new MaterialDialog.Builder(context)
                 .titleColorRes(R.color.def_text_black)
                 .contentColorRes(R.color.def_text_mid)
-                .widgetColorRes(R.color.colorAccent)
-                .canceledOnTouchOutside(false);
-
+                .widgetColorRes(R.color.colorAccent);
     }
 
     public static MaterialDialog newProgressDialog(Context context) {

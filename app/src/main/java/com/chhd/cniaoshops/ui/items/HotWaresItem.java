@@ -1,21 +1,19 @@
 package com.chhd.cniaoshops.ui.items;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
-import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.bean.Wares;
 import com.chhd.cniaoshops.biz.CartBiz;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.cniaoshops.util.ToastyUtils;
-import com.chhd.per_library.util.UiUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.chhd.cniaoshops.ui.activity.WaresDetailActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -31,9 +29,15 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 
 public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> implements View.OnClickListener {
 
+    private Context context;
     private Wares wares;
 
     public HotWaresItem(Wares wares) {
+        this.wares = wares;
+    }
+
+    public HotWaresItem(Context context, Wares wares) {
+        this.context = context;
         this.wares = wares;
     }
 
@@ -45,7 +49,7 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> impl
 
     @Override
     public int getLayoutRes() {
-        return R.layout.list_item_hot_wares;
+        return R.layout.list_item_wares;
     }
 
     @Override
@@ -56,24 +60,36 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> impl
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, Holder holder, int position, List payloads) {
-        holder.ivPic.setImageURI(Uri.parse(wares.getImgUrl()));
-        holder.tvTitle.setText(wares.getName());
+        Picasso
+                .with(context)
+                .load(wares.getImgUrl())
+                .into(holder.ivPic);
+        holder.tvName.setText(wares.getName());
         holder.tvPrice.setText("" + wares.getPrice());
         holder.btnBuy.setOnClickListener(this);
+        holder.itemView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        new CartBiz().put(convertData(wares));
-        ToastyUtils.success(UiUtils.getString(R.string.add_shopping_cart_success));
+        switch (v.getId()) {
+            case R.id.btn_buy:
+                new CartBiz().put(wares);
+                break;
+            default:
+                Intent intent = new Intent(context, WaresDetailActivity.class);
+                intent.putExtra("wares", wares);
+                context.startActivity(intent);
+                break;
+        }
     }
 
     class Holder extends FlexibleViewHolder {
 
         @BindView(R.id.iv_pic)
-        SimpleDraweeView ivPic;
-        @BindView(R.id.tv_title)
-        TextView tvTitle;
+        ImageView ivPic;
+        @BindView(R.id.tv_name)
+        TextView tvName;
         @BindView(R.id.tv_price)
         TextView tvPrice;
         @BindView(R.id.btn_buy)
@@ -81,20 +97,7 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> impl
 
         public Holder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
-
             ButterKnife.bind(this, view);
-
         }
-
-    }
-
-    private ShoppingCart convertData(Wares wares) {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setId(wares.getId());
-        cart.setDescription(wares.getDescription());
-        cart.setImgUrl(wares.getImgUrl());
-        cart.setName(wares.getName());
-        cart.setPrice(wares.getPrice());
-        return cart;
     }
 }
