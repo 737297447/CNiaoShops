@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.chhd.cniaoshops.ui.fragment.PicFragment">
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_pic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

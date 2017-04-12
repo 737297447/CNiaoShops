@@ -21,10 +21,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <WebView
-            android:id="@+id/web_view"
+        <in.srain.cube.views.ptr.PtrClassicFrameLayout
+            android:id="@+id/refresh_layout"
+            style="@style/PtrStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <WebView
+                android:id="@+id/web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
 
         <com.chhd.cniaoshops.ui.widget.ProgressView
             android:id="@+id/progress_view"

@@ -106,6 +106,7 @@ public class HorScrollPicActivity extends SwipeBackActivity {
             });
         }
 
+        setEnableSwipe(false);
     }
 
     private void executeCircleReveal() {
@@ -187,8 +188,10 @@ public class HorScrollPicActivity extends SwipeBackActivity {
 
     private void exit() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ivPic.setVisibility(View.VISIBLE);
-            finishAfterTransition();
+//            ivPic.setVisibility(View.VISIBLE);
+//            finishAfterTransition();
+            finish();
+            overridePendingTransition(R.anim.set_aty_exit_aty_enter, R.anim.set_aty_exit_aty_exit);
         } else {
             finish();
             overridePendingTransition(R.anim.set_aty_exit_aty_enter, R.anim.set_aty_exit_aty_exit);

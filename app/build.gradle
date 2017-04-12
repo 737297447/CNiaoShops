@@ -57,14 +57,11 @@ dependencies {
     compile 'com.liaoinstan.springview:library:1.2.6'
     compile 'com.github.liuguangqiang.prettyprogressbar:library:0.2.0'
     compile 'com.github.liuguangqiang.swipeback:library:1.0.2@aar'
-    compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'com.github.d-max:spots-dialog:0.7@aar'
-    compile 'me.xiaopan:sketch:2.3.2'
     compile 'com.wanjian:cockroach:0.0.5'
-    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
     compile 'com.github.Aspsine:SwipeToLoadLayout:1.0.4'
     compile 'com.zhy:okhttputils:2.6.2'
-    compile 'com.github.rhlff:NestedScrollWebView:v1.0.2'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
@@ -73,5 +70,5 @@ dependencies {
     compile project(':per_library')
     compile project(':image_slider')
     compile project(':material_dialogs_core')
-    compile project(':x_refresh_view')
+    compile project(':ptr-lib')
 }

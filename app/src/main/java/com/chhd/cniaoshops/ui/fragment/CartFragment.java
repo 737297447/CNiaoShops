@@ -22,6 +22,7 @@ import com.chhd.cniaoshops.ui.widget.CnToolbar;
 import com.chhd.cniaoshops.util.DialogUtils;
 import com.chhd.per_library.util.UiUtils;
 import com.liaoinstan.springview.container.DefaultHeader;
+import com.liaoinstan.springview.container.MeituanHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
 import java.math.RoundingMode;
@@ -69,19 +70,16 @@ public class CartFragment extends BaseFragment {
 
         initActionBar(false);
 
+        showData();
     }
 
     private void initView() {
         DefaultHeader defaultHeader = new DefaultHeader(getActivity());
-        springView.setHeader(defaultHeader);
+        MeituanHeader header = new MeituanHeader(getActivity(), MT_PULL_ANIM_SRCS, MT_REFRESH_ANIM_SRCS);
+        springView.setHeader(header);
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(onFreshListener);
-        springView.post(new Runnable() {
-            @Override
-            public void run() {
-                springView.callFresh();
-            }
-        });
+//        refresh();
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiUtils.dp2px(50));
         View footerView = new View(getActivity());
@@ -95,6 +93,15 @@ public class CartFragment extends BaseFragment {
         rvShoppingcart.setAdapter(adapter);
         rvShoppingcart.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+    }
+
+    private void refresh() {
+        springView.post(new Runnable() {
+            @Override
+            public void run() {
+                springView.callFresh();
+            }
+        });
     }
 
     private BaseQuickAdapter.OnItemChildLongClickListener onItemChildLongClickListener = new BaseQuickAdapter.OnItemChildLongClickListener() {

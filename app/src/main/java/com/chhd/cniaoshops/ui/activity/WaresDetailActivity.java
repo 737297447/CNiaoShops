@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -19,6 +20,10 @@ import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.util.ToastUtils;
 
 import butterknife.BindView;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 
 public class WaresDetailActivity extends BaseActivity {
 
@@ -28,6 +33,8 @@ public class WaresDetailActivity extends BaseActivity {
     WebView webView;
     @BindView(R.id.progress_view)
     ProgressView progressView;
+    @BindView(R.id.refresh_layout)
+    PtrClassicFrameLayout refreshLayout;
 
     private String url = SERVER_URL + "wares/detail.html";
     private Wares wares;
@@ -47,7 +54,25 @@ public class WaresDetailActivity extends BaseActivity {
         webView.addJavascriptInterface(appInterface, "appInterface");
         webView.setWebViewClient(webViewClient);
         webView.setWebChromeClient(webChromeClient);
-        webView.loadUrl(url);
+
+        refreshLayout.setLastUpdateTimeRelateObject(this);
+        refreshLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                webView.loadUrl(url);
+            }
+
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+        });
+        refreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.autoRefresh();
+            }
+        }, 1);
     }
 
     private void initActionBar() {
@@ -62,6 +87,7 @@ public class WaresDetailActivity extends BaseActivity {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             appInterface.showDetail(wares.getId());
+            refreshLayout.refreshComplete();
         }
     };
 

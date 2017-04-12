@@ -76,4 +76,11 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="PtrStyle">
+        <item name="ptr_duration_to_close">200</item>
+        <item name="ptr_duration_to_close_header">1000</item>
+        <item name="ptr_ratio_of_header_height_to_refresh">1.2</item>
+        <item name="ptr_resistance">1.7</item>
+    </style>
+
 </resources>
