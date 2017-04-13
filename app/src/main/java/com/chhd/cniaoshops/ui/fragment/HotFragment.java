@@ -18,6 +18,7 @@ import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
 import com.chhd.cniaoshops.ui.adapter.HotWaresAdapter;
 import com.chhd.cniaoshops.ui.items.HotWaresItem;
 import com.chhd.cniaoshops.ui.items.ProgressItem;
+import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
 import com.chhd.cniaoshops.ui.widget.EmptyView;
 import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.util.UiUtils;
@@ -87,6 +88,7 @@ public class HotFragment extends BaseFragment implements Constant {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adatper);
         recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(WARES_DIMEN_NORMAL), true));
+        recyclerView.addOnScrollListener(new ScrollListener());
 
         adatper.setFastScroller(fastScroller, UiUtils.getColor(R.color.colorAccent));//Setup FastScroller after the Adapter has been added to the RecyclerView.
     }
@@ -244,7 +246,7 @@ public class HotFragment extends BaseFragment implements Constant {
             case ON_NORMAL: {
                 items.clear();
                 for (Wares wares : page.getList()) {
-                    HotWaresItem item = new HotWaresItem(getActivity(), wares);
+                    HotWaresItem item = new HotWaresItem(wares, recyclerView);
                     items.add(item);
                 }
                 adatper.notifyDataSetChanged();
@@ -253,7 +255,7 @@ public class HotFragment extends BaseFragment implements Constant {
             case ON_LOAD_MORE: {
                 final List<AbstractFlexibleItem> newItems = new ArrayList<>();
                 for (Wares wares : page.getList()) {
-                    HotWaresItem item = new HotWaresItem(getActivity(), wares);
+                    HotWaresItem item = new HotWaresItem(wares, recyclerView);
                     newItems.add(item);
                 }
 

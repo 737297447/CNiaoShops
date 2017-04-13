@@ -7,14 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Banner;
@@ -27,14 +25,15 @@ import com.chhd.cniaoshops.ui.activity.WaresListActivity;
 import com.chhd.cniaoshops.ui.adapter.HomeCategoryAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
-import com.chhd.cniaoshops.ui.listener.SliderClickListener;
-import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
+import com.chhd.cniaoshops.ui.listener.clazz.SliderClickListener;
 import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -166,7 +165,9 @@ public class HomeFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(WARES_DIMEN_NORMAL)));
+        recyclerView.addOnScrollListener(new ScrollListener());
     }
+
 
     private BaseQuickAdapter.OnItemChildClickListener onItemChildClickListener = new BaseQuickAdapter.OnItemChildClickListener() {
         @Override

@@ -1,8 +1,11 @@
 package com.chhd.cniaoshops.ui.activity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -11,15 +14,17 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
-import com.chhd.cniaoshops.ui.base.activity.HideSoftInputActivity;
 import com.chhd.cniaoshops.bean.Tab;
+import com.chhd.cniaoshops.global.AppApplication;
+import com.chhd.cniaoshops.ui.base.activity.HideSoftInputActivity;
 import com.chhd.cniaoshops.ui.fragment.CartFragment;
 import com.chhd.cniaoshops.ui.fragment.CategoryFragment;
 import com.chhd.cniaoshops.ui.fragment.HomeFragment;
 import com.chhd.cniaoshops.ui.fragment.HotFragment;
 import com.chhd.cniaoshops.ui.fragment.MineFragment;
-import com.chhd.cniaoshops.global.AppApplication;
+import com.chhd.cniaoshops.ui.widget.CnToolbar;
 import com.chhd.cniaoshops.ui.widget.FragmentTabHost;
+import com.chhd.cniaoshops.util.LoggerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +33,8 @@ import butterknife.BindView;
 
 public class MainActivity extends HideSoftInputActivity {
 
+    @BindView(R.id.cn_tool_bar)
+    CnToolbar toolbar;
     @BindView(android.R.id.tabcontent)
     FrameLayout frameLayout;
     @BindView(android.R.id.tabhost)
@@ -45,6 +52,7 @@ public class MainActivity extends HideSoftInputActivity {
         AppApplication.isHotRun = true;
 
         initTab();
+
     }
 
 
@@ -74,7 +82,23 @@ public class MainActivity extends HideSoftInputActivity {
             tabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
         }
 
+        tabHost.setOnTabChangedListener(onTabChangeListener);
     }
+
+    private TabHost.OnTabChangeListener onTabChangeListener = new TabHost.OnTabChangeListener() {
+        @Override
+        public void onTabChanged(String tabId) {
+            if (tabId.equals(getString(R.string.tab_me))) {
+                toolbar.setVisibility(View.GONE);
+            } else {
+                toolbar.setVisibility(View.VISIBLE);
+            }
+            if (tabId.equals(getString(R.string.tab_shopping_cart))) {
+                toolbar.hideSearchView();
+                toolbar.setTitle(R.string.tab_shopping_cart);
+            }
+        }
+    };
 
     private View getIndicator(Tab tab) {
         View view = View.inflate(context, R.layout.tab_indicator, null);
@@ -84,4 +108,5 @@ public class MainActivity extends HideSoftInputActivity {
         tvTitle.setText(tab.getTitle());
         return view;
     }
+
 }

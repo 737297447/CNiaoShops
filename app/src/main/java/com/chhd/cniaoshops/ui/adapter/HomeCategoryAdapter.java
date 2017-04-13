@@ -1,6 +1,7 @@
 package com.chhd.cniaoshops.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
@@ -39,16 +40,22 @@ public class HomeCategoryAdapter extends SimpleMultiItemAdapter<HomeCampaign, Ba
             Picasso
                     .with(mContext)
                     .load(campaign.getCpOne().getImgUrl())
+                    .config(Bitmap.Config.RGB_565)
+                    .tag(recyclerView)
                     .into(ivBig);
 
             Picasso
                     .with(mContext)
                     .load(campaign.getCpTwo().getImgUrl())
+                    .config(Bitmap.Config.RGB_565)
+                    .tag(recyclerView)
                     .into(ivSmallTop);
 
             Picasso
                     .with(mContext)
                     .load(campaign.getCpThree().getImgUrl())
+                    .config(Bitmap.Config.RGB_565)
+                    .tag(recyclerView)
                     .into(ivSmallBottom);
 
             holder.addOnClickListener(R.id.iv_big);

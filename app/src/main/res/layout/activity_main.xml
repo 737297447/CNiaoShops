@@ -27,6 +27,7 @@
     <com.chhd.cniaoshops.ui.widget.FragmentTabHost
         android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="55dp" />
+        android:layout_height="55dp"
+        android:background="@color/white" />
 
 </LinearLayout>

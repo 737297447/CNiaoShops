@@ -3,6 +3,7 @@ package com.chhd.cniaoshops.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class WaresAdapter extends SimpleAdapter<Wares, BaseViewHolder> {
         Picasso
                 .with(mContext)
                 .load(item.getImgUrl())
+                .config(Bitmap.Config.RGB_565)
+                .tag(recyclerView)
                 .into(holder.ivPic);
         holder.tvName.setText(item.getName());
         holder.tvPrice.setText(String.format("￥%.2f", item.getPrice()));

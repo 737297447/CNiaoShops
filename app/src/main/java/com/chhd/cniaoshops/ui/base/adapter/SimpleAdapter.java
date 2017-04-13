@@ -25,7 +25,7 @@ import java.util.List;
 
 public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
 
-    private RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
     private Context context;
 
     private LottieAnimationView animationView;

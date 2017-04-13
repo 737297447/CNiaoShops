@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/material_dialogs_core" />
             <option value="$PROJECT_DIR$/per_library" />
             <option value="$PROJECT_DIR$/ptr-lib" />
+            <option value="$PROJECT_DIR$/sharesdk" />
             <option value="$PROJECT_DIR$/toasty" />
           </set>
         </option>

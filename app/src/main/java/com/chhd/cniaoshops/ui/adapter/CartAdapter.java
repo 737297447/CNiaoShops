@@ -1,6 +1,7 @@
 package com.chhd.cniaoshops.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
@@ -51,6 +52,8 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart, BaseViewHolder> {
         Picasso
                 .with(mContext)
                 .load(item.getImgUrl())
+                .config(Bitmap.Config.RGB_565)
+                .tag(recyclerView)
                 .into(holder.ivPic);
         holder.tvTitle.setText(item.getName());
         holder.tvPrice.setText(String.format("￥ %s", numberFormat.format(item.getPrice()).toString()));
@@ -72,6 +75,7 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart, BaseViewHolder> {
         });
         helper.addOnClickListener(R.id.check_box);
         helper.addOnClickListener(R.id.btn_delete);
+        helper.addOnClickListener(R.id.ll_content);
         helper.addOnLongClickListener(R.id.ll_content);
     }
 

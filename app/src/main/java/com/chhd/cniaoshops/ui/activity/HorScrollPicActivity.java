@@ -1,6 +1,7 @@
 package com.chhd.cniaoshops.ui.activity;
 
 import android.animation.Animator;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -66,6 +67,7 @@ public class HorScrollPicActivity extends SwipeBackActivity {
         Picasso
                 .with(instance)
                 .load(imgUrls[pos])
+                .config(Bitmap.Config.RGB_565)
                 .into(ivPic);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -138,6 +140,7 @@ public class HorScrollPicActivity extends SwipeBackActivity {
             Picasso
                     .with(instance)
                     .load(imgUrls[position])
+                    .config(Bitmap.Config.RGB_565)
                     .into(ivPic);
             tvPage.setText(String.format("%1$s / %2$s", position + 1, imgUrls.length));
             if (pageChangeListener != null) {

@@ -17,6 +17,7 @@ import com.zhy.http.okhttp.log.LoggerInterceptor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import cn.sharesdk.framework.ShareSDK;
 import okhttp3.OkHttpClient;
 
 /**
@@ -45,6 +46,7 @@ public class AppApplication extends BaseApplication implements Constant {
 
         Cockroach.install(exceptionHandler);
 
+        ShareSDK.initSDK(this);
     }
 
     private void initHttpLib() {

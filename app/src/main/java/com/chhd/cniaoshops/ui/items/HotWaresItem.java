@@ -2,6 +2,8 @@ package com.chhd.cniaoshops.ui.items;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,16 +31,13 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 
 public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> implements View.OnClickListener {
 
-    private Context context;
     private Wares wares;
+    private RecyclerView recyclerView;
 
-    public HotWaresItem(Wares wares) {
-        this.wares = wares;
-    }
 
-    public HotWaresItem(Context context, Wares wares) {
-        this.context = context;
+    public HotWaresItem(Wares wares, RecyclerView recyclerView) {
         this.wares = wares;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -61,8 +60,10 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> impl
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, Holder holder, int position, List payloads) {
         Picasso
-                .with(context)
+                .with(recyclerView.getContext())
                 .load(wares.getImgUrl())
+                .config(Bitmap.Config.RGB_565)
+                .tag(recyclerView)
                 .into(holder.ivPic);
         holder.tvName.setText(wares.getName());
         holder.tvPrice.setText("" + wares.getPrice());
@@ -77,9 +78,9 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> impl
                 new CartBiz().put(wares);
                 break;
             default:
-                Intent intent = new Intent(context, WaresDetailActivity.class);
+                Intent intent = new Intent(v.getContext(), WaresDetailActivity.class);
                 intent.putExtra("wares", wares);
-                context.startActivity(intent);
+                v.getContext().startActivity(intent);
                 break;
         }
     }

@@ -1,10 +1,13 @@
 package com.chhd.cniaoshops.ui.fragment;
 
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,9 +18,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
+import com.chhd.cniaoshops.bean.Wares;
 import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.ui.activity.WaresDetailActivity;
 import com.chhd.cniaoshops.ui.adapter.CartAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
+import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
 import com.chhd.cniaoshops.ui.widget.CnToolbar;
 import com.chhd.cniaoshops.util.DialogUtils;
 import com.chhd.per_library.util.UiUtils;
@@ -79,7 +85,6 @@ public class CartFragment extends BaseFragment {
         springView.setHeader(header);
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(onFreshListener);
-//        refresh();
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiUtils.dp2px(50));
         View footerView = new View(getActivity());
@@ -92,17 +97,9 @@ public class CartFragment extends BaseFragment {
 
         rvShoppingcart.setAdapter(adapter);
         rvShoppingcart.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        rvShoppingcart.addOnScrollListener(new ScrollListener());
     }
 
-    private void refresh() {
-        springView.post(new Runnable() {
-            @Override
-            public void run() {
-                springView.callFresh();
-            }
-        });
-    }
 
     private BaseQuickAdapter.OnItemChildLongClickListener onItemChildLongClickListener = new BaseQuickAdapter.OnItemChildLongClickListener() {
         @Override
@@ -110,7 +107,8 @@ public class CartFragment extends BaseFragment {
             final int pos = position;
             DialogUtils
                     .newBuilder(getActivity())
-                    .items(getString(R.string.delete))
+                    .title(R.string.operate)
+                    .items(Html.fromHtml(String.format("<font color='#FF0000'>%s</font>", getString(R.string.delete))))
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
@@ -149,6 +147,11 @@ public class CartFragment extends BaseFragment {
                     cart.setChecked(!cart.isChecked());
                     adapter.notifyItemChanged(position);
                     checkbox.setChecked(isCheckAll());
+                    break;
+                case R.id.ll_content:
+                    Intent intent = new Intent(getActivity(), WaresDetailActivity.class);
+                    intent.putExtra("wares", (Wares) carts.get(position));
+                    startActivity(intent);
                     break;
                 case R.id.btn_delete:
                     new CartBiz().delete(carts.get(position));

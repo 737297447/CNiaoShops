@@ -1,4 +1,4 @@
-package com.chhd.cniaoshops.ui.listener;
+package com.chhd.cniaoshops.ui.listener.clazz;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.activity.HorScrollPicActivity;
+import com.chhd.cniaoshops.ui.listener.PageChangeListener;
 import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;

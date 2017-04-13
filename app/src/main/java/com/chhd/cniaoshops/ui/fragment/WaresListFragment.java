@@ -25,6 +25,7 @@ import com.chhd.cniaoshops.ui.base.fragment.LazyFragment;
 import com.chhd.cniaoshops.ui.decoration.GridSpaceItemDecoration;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
 import com.chhd.cniaoshops.ui.decoration.StaggeredSpaceItemDecoration;
+import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
 import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.util.JsonUtils;
 import com.chhd.per_library.util.UiUtils;
@@ -183,7 +184,7 @@ public class WaresListFragment extends LazyFragment implements OnRefreshListener
         }
     }
 
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+    private RecyclerView.OnScrollListener onScrollListener = new ScrollListener() {
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

@@ -37,4 +37,7 @@
     <string name="release_to_load_more">释放立刻加载</string>
     <string name="loading_more">正在加载更多...</string>
     <string name="wares_detail">商品详情</string>
+    <string name="operate">操作</string>
+    <string name="share">分享</string>
+    <string name="click_login">点击登录</string>
 </resources>

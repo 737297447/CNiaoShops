@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/material_dialogs_core/material_dialogs_core.iml" filepath="$PROJECT_DIR$/material_dialogs_core/material_dialogs_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/per_library/per_library.iml" filepath="$PROJECT_DIR$/per_library/per_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/ptr-lib/ptr-lib.iml" filepath="$PROJECT_DIR$/ptr-lib/ptr-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sharesdk/sharesdk.iml" filepath="$PROJECT_DIR$/sharesdk/sharesdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/toasty/toasty.iml" filepath="$PROJECT_DIR$/toasty/toasty.iml" />
     </modules>
   </component>

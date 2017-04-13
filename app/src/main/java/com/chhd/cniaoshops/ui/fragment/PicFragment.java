@@ -1,5 +1,6 @@
 package com.chhd.cniaoshops.ui.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -45,6 +46,7 @@ public class PicFragment extends BaseFragment {
         Picasso
                 .with(getActivity())
                 .load(imgUrl)
+                .config(Bitmap.Config.RGB_565)
                 .into(ivPic);
     }
 }

@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chhd.cniaoshops.R;
@@ -26,7 +24,8 @@ import com.chhd.cniaoshops.ui.adapter.CategoryAdapter;
 import com.chhd.cniaoshops.ui.adapter.WaresAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.GridSpaceItemDecoration;
-import com.chhd.cniaoshops.ui.listener.SliderClickListener;
+import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
+import com.chhd.cniaoshops.ui.listener.clazz.SliderClickListener;
 import com.chhd.cniaoshops.ui.widget.EmptyView;
 import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.util.UiUtils;
@@ -39,7 +38,6 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.request.BaseRequest;
-import com.wang.avi.AVLoadingIndicatorView;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.CacheMode;
@@ -52,7 +50,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -259,6 +256,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
         rvWares.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rvWares.setAdapter(waresAdapter);
         rvWares.addItemDecoration(new GridSpaceItemDecoration(2, UiUtils.dp2px(WARES_DIMEN_SMALL), true, true));
+        rvWares.addOnScrollListener(new ScrollListener());
 
         refreshLayout.setOnRefreshListener(refreshListenerAdapter);
         refreshLayout.startRefresh();
