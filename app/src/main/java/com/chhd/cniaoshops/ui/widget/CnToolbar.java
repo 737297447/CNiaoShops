@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.per_library.util.UiUtils;
 
 /**
  * Created by CWQ on 2016/11/15.
@@ -23,7 +21,7 @@ import com.chhd.per_library.util.UiUtils;
 public class CnToolbar extends Toolbar {
 
     private TextView tvTitle;
-    private EditText etSearch;
+    private TextView etSearch;
     private Button btnRight;
 
     public CnToolbar(Context context) {
@@ -45,7 +43,7 @@ public class CnToolbar extends Toolbar {
     private void initView() {
         View view = View.inflate(getContext(), R.layout.toolbar_cn, null);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        etSearch = (EditText) view.findViewById(R.id.et_search);
+        etSearch = (TextView) view.findViewById(R.id.et_search);
         btnRight = (Button) view.findViewById(R.id.btn_right);
         addView(view);
     }

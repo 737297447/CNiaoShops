@@ -22,16 +22,15 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:background="@color/gray_shopping_cart_bottom"
-        android:paddingRight="10dp">
+        android:paddingLeft="@dimen/padding_normal"
+        android:background="#9997a7a7"
+        android:paddingRight="@dimen/padding_normal">
 
         <CheckBox
             android:id="@+id/check_box"
             style="@style/RedCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:checked="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/all_select"

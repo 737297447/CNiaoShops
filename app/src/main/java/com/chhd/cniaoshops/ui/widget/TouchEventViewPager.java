@@ -5,8 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.chhd.cniaoshops.util.LoggerUtils;
-
 /**
  * Created by CWQ on 2017/4/7.
  */

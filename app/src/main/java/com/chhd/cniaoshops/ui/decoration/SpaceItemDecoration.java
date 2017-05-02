@@ -15,7 +15,11 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
     private int space;
     private int orientation = VERTICAL;
-    private int padding;
+
+    private int left;
+    private int top;
+    private int right;
+    private int bottom;
 
     private boolean isEquidistance;
 
@@ -23,50 +27,48 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         this.space = space;
     }
 
-    public SpaceItemDecoration(int space, boolean isEquidistance) {
-        this.space = space;
-        this.isEquidistance = isEquidistance;
-    }
-
     public SpaceItemDecoration(int space, int orientation) {
         this.space = space;
         this.orientation = orientation;
     }
 
-    public SpaceItemDecoration(int space, int orientation, int padding) {
+    public SpaceItemDecoration(int space, int orientation, boolean isEquidistance) {
         this.space = space;
         this.orientation = orientation;
-        this.padding = padding;
+        this.isEquidistance = isEquidistance;
+
+        left = space;
+        top = space;
+        right = space;
+        bottom = space;
+    }
+
+    public SpaceItemDecoration(int space, int orientation, int left, int top, int right, int bottom) {
+        this.space = space;
+        this.orientation = orientation;
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        if (orientation == HORIZONTAL) {
-            if (parent.getChildAdapterPosition(view) != 0) {
-                outRect.set(space, 0, 0, 0);
+        if (orientation == VERTICAL) {
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.set(left, top, right, 0);
+            } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+                outRect.set(left, space, right, bottom);
+            } else {
+                outRect.set(left, space, right, 0);
             }
         } else {
-            if (isEquidistance) {
-                if (parent.getChildAdapterPosition(view) != 0) {
-                    outRect.set(space, 0, space, space);
-                } else {
-                    outRect.set(space, space, space, space);
-                }
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.set(left, top, 0, bottom);
+            } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+                outRect.set(space, top, right, bottom);
             } else {
-                if (padding != 0) {
-                    if (parent.getChildAdapterPosition(view) == 0) {
-                        outRect.set(padding, padding, padding, 0);
-                    } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
-                        outRect.set(padding, space, padding, padding);
-                    } else {
-                        outRect.set(padding, space, padding, 0);
-                    }
-
-                } else {
-                    if (parent.getChildAdapterPosition(view) != 0) {
-                        outRect.set(0, space, 0, 0);
-                    }
-                }
+                outRect.set(space, top, 0, bottom);
             }
         }
     }

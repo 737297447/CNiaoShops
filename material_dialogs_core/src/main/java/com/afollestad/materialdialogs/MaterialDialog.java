@@ -30,6 +30,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,12 @@ public class MaterialDialog extends DialogBase implements
         final LayoutInflater inflater = LayoutInflater.from(builder.context);
         view = (MDRootLayout) inflater.inflate(DialogInit.getInflateLayout(builder), null);
         DialogInit.init(this);
+
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        positiveButton.setAllCaps(false);
+        neutralButton.setAllCaps(false);
+        negativeButton.setAllCaps(false);
     }
 
     public final Builder getBuilder() {

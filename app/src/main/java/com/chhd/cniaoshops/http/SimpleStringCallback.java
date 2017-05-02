@@ -8,13 +8,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Config;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.DialogUtils;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.cniaoshops.util.ToastyUtils;
-import com.lzy.okgo.model.HttpParams;
+import com.chhd.cniaoshops.util.DialogUtil;
+import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.cniaoshops.util.ToastyUtil;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.callback.StringCallback;
-
 
 import java.nio.charset.Charset;
 
@@ -22,7 +20,6 @@ import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okio.Buffer;
 
 import static com.alibaba.fastjson.util.IOUtils.UTF8;
@@ -33,7 +30,7 @@ import static com.alibaba.fastjson.util.IOUtils.UTF8;
 
 public abstract class SimpleStringCallback extends StringCallback implements Constant {
 
-    private boolean isToastError = true;
+    private boolean isToastError = false;
     private int delayMillis = DELAYMILLIS_FOR_RQUEST_FINISH;
     private long startTimeMillis;
     private Context progressDialog;
@@ -46,7 +43,7 @@ public abstract class SimpleStringCallback extends StringCallback implements Con
         this.request = request;
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
-            dialog = DialogUtils.newProgressDialog(progressDialog);
+            dialog = DialogUtil.newProgressDialog(progressDialog);
             dialog.show();
         }
         before(request, id);
@@ -117,7 +114,9 @@ public abstract class SimpleStringCallback extends StringCallback implements Con
     public abstract void success(String response, int id);
 
     public void error(Call call, Exception e, int id) {
-        ToastyUtils.error(R.string.network_connect_fail);
+        if (isToastError|| progressDialog != null) {
+            ToastyUtil.error(R.string.network_connect_fail);
+        }
     }
 
     public void after(int id) {
@@ -126,11 +125,12 @@ public abstract class SimpleStringCallback extends StringCallback implements Con
 
     private void d(Request request, String json) {
         if (Config.isDebug) {
-            String paramsStr = request.body() != null ? "params:\t" + formatParamsStr(getParams(request)) + "\n\n" : "";
+            String paramsStr = request.body() != null ? "params:\t" + formatParamsStr(getParams(request)) : "";
             String message =
                     "url:\t\t" + request.url().toString()
                             + "\n\n"
                             + paramsStr
+                            + "\n\n"
                             + "json:\t" + json;
             Logger.d(message);
         }
@@ -138,18 +138,19 @@ public abstract class SimpleStringCallback extends StringCallback implements Con
 
     private void e(Request request, Throwable throwable) {
         if (Config.isDebug) {
-            String paramsStr = request.body() != null ? "params:\t" + formatParamsStr(getParams(request)) + "\n\n" : "";
+            String paramsStr = request.body() != null ? "params:\t" + formatParamsStr(getParams(request))  : "";
             String message =
                     "url:\t\t" + request.url().toString()
                             + "\n\n"
                             + paramsStr
+                            + "\n\n"
                             + ERROR;
             Logger.e(throwable, message);
         }
     }
 
     private String formatParamsStr(String params) {
-        return params.replace("[", "").replace("]", "").replace("&", "\n" + "params:\t");
+        return params.replace("&", "\n" + "params:\t");
     }
 
     private String getParams(Request request) {
@@ -165,7 +166,7 @@ public abstract class SimpleStringCallback extends StringCallback implements Con
             String paramsStr = buffer.readString(charset);
             return paramsStr;
         } catch (Exception e) {
-            LoggerUtils.e(e);
+            LoggerUtil.e(e);
         }
         return "";
     }

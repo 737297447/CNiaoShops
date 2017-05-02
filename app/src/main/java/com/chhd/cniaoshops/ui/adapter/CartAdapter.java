@@ -1,6 +1,5 @@
 package com.chhd.cniaoshops.ui.adapter;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
-import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.biz.CartProvider;
 import com.chhd.cniaoshops.ui.base.adapter.SimpleAdapter;
 import com.chhd.cniaoshops.ui.widget.NumberAddSubView;
 import com.chhd.per_library.ui.base.SimpleHolder;
@@ -62,14 +61,14 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart, BaseViewHolder> {
             @Override
             public void onButtonAddClick(View view, int value) {
                 item.setCount(value);
-                new CartBiz().update(item);
+                new CartProvider().update(item);
                 numberViewButtonClickListener.onClick(view);
             }
 
             @Override
             public void onButtonSubClick(View view, int value) {
                 item.setCount(value);
-                new CartBiz().update(item);
+                new CartProvider().update(item);
                 numberViewButtonClickListener.onClick(view);
             }
         });

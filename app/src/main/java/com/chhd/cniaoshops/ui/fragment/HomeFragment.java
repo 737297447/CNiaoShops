@@ -19,23 +19,22 @@ import com.chhd.cniaoshops.bean.Banner;
 import com.chhd.cniaoshops.bean.Campaign;
 import com.chhd.cniaoshops.bean.HomeCampaign;
 import com.chhd.cniaoshops.bean.HomeCategory;
-import com.chhd.cniaoshops.biz.BannerBiz;
+import com.chhd.cniaoshops.biz.BannerProvider;
 import com.chhd.cniaoshops.http.OnResponse;
 import com.chhd.cniaoshops.ui.activity.WaresListActivity;
 import com.chhd.cniaoshops.ui.adapter.HomeCategoryAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
-import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
 import com.chhd.cniaoshops.ui.listener.clazz.SliderClickListener;
-import com.chhd.per_library.util.UiUtils;
+import com.chhd.per_library.util.UiUtil;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.CacheMode;
 import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
@@ -64,7 +63,6 @@ public class HomeFragment extends BaseFragment {
     private List<Banner> banners = new ArrayList<>();
     private List<HomeCampaign> campaigns = new ArrayList<>();
     private HomeCategoryAdapter adapter;
-    private HomeFragment instance = this;
     private View empty;
     private SliderLayout sliderLayout;
 
@@ -88,6 +86,7 @@ public class HomeFragment extends BaseFragment {
         String url = SERVER_URL + "campaign/recommend";
 
         Request<String> request = NoHttp.createStringRequest(url, RequestMethod.POST);
+        request.setCacheMode(CacheMode.REQUEST_NETWORK_FAILED_READ_CACHE);
 
         RequestQueue queue = NoHttp.newRequestQueue();
         queue.add(0, request, new OnResponse<String>() {
@@ -113,7 +112,7 @@ public class HomeFragment extends BaseFragment {
             }
 
             @Override
-            public void finish(int what) {
+            public void after(int what) {
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -129,8 +128,8 @@ public class HomeFragment extends BaseFragment {
                 homeCampaigns.get(i).setItemType(HomeCategory.TYPE_LEFT);
             }
         }
-        instance.campaigns.clear();
-        instance.campaigns.addAll(homeCampaigns);
+        campaigns.clear();
+        campaigns.addAll(homeCampaigns);
         adapter.notifyDataSetChanged();
     }
 
@@ -164,8 +163,7 @@ public class HomeFragment extends BaseFragment {
         adapter.setOnItemChildClickListener(onItemChildClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(WARES_DIMEN_NORMAL)));
-        recyclerView.addOnScrollListener(new ScrollListener());
+        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtil.dp2px(DIMEN_NORMAL)));
     }
 
 
@@ -238,9 +236,9 @@ public class HomeFragment extends BaseFragment {
         sliderLayout = ButterKnife.findById(header, R.id.slider_layout);
 
         View indicators = View.inflate(getActivity(), R.layout.indicators_bird, null);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtils.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtil.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
         params.alignWithParent = true;
-        params.rightMargin = UiUtils.dp2px(10);
+        params.rightMargin = UiUtil.dp2px(10);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         ((RelativeLayout) header).addView(indicators, params);
@@ -249,7 +247,7 @@ public class HomeFragment extends BaseFragment {
 
         sliderLayout.startAutoCycle(5000, 5000, true);
 
-        List<BaseSliderView> banners = new BannerBiz(getActivity()).getBanner();
+        List<BaseSliderView> banners = new BannerProvider(getActivity()).getBanner();
         for (BaseSliderView bannser : banners) {
             bannser.setOnSliderClickListener(new SliderClickListener(getActivity(), sliderLayout));
             sliderLayout.addSlider(bannser);

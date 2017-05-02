@@ -12,7 +12,7 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.ui.fragment.WaresListFragment;
 import com.chhd.per_library.ui.base.SimpleFmPagerAdapter;
-import com.chhd.per_library.util.UiUtils;
+import com.chhd.per_library.util.UiUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class WaresListActivity extends BaseActivity {
     ViewPager viewPager;
 
     private List<Fragment> fragments = new ArrayList<>();
-    private String[] titles = new String[]{UiUtils.getString(R.string.defualt), UiUtils.getString(R.string.sales_volume), UiUtils.getString(R.string.price)};
+    private String[] titles = new String[]{UiUtil.getString(R.string.defualt), UiUtil.getString(R.string.sales_volume), UiUtil.getString(R.string.price)};
     private int[] orderBys = new int[]{0, 1, 2};
 
     @Override
@@ -64,9 +64,9 @@ public class WaresListActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem item = menu.add(0, MENU_DEFAULT_ID, 0, R.string.grid);
+        MenuItem item = menu.add(0, MENU_DEFAULT_ID, 0, R.string.list);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        item.setIcon(R.drawable.ic_grid_on_white_24dp);
+        item.setIcon(R.drawable.ic_dehaze_white_24dp);
         return super.onCreateOptionsMenu(menu);
     }
 

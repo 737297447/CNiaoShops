@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,7 +17,7 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Category;
 import com.chhd.cniaoshops.bean.Page;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.biz.BannerBiz;
+import com.chhd.cniaoshops.biz.BannerProvider;
 import com.chhd.cniaoshops.http.OnResponse;
 import com.chhd.cniaoshops.http.SimpleCallback;
 import com.chhd.cniaoshops.ui.StatusEnum;
@@ -24,11 +25,10 @@ import com.chhd.cniaoshops.ui.adapter.CategoryAdapter;
 import com.chhd.cniaoshops.ui.adapter.WaresAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.GridSpaceItemDecoration;
-import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
 import com.chhd.cniaoshops.ui.listener.clazz.SliderClickListener;
 import com.chhd.cniaoshops.ui.widget.EmptyView;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.per_library.util.UiUtils;
+import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.per_library.util.UiUtil;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -107,7 +107,6 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
         request.add("categoryId", categoryId);
         request.add("curPage", curPage);
         request.add("pageSize", pageSize);
-        request.setCacheMode(CacheMode.DEFAULT);
 
         RequestQueue queue = NoHttp.newRequestQueue();
         queue.add(0, request, new OnResponse<String>() {
@@ -122,7 +121,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                     showWaresData(data);
                     waresAdapter.setCustomEmptyView();
                 } catch (Exception e) {
-                    LoggerUtils.e(e, response);
+                    LoggerUtil.e(e);
                 }
             }
 
@@ -140,8 +139,8 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
             }
 
             @Override
-            public void finish(int what) {
-                super.finish(what);
+            public void after(int what) {
+                super.after(what);
                 refreshLayout.finishRefreshing();
             }
         });
@@ -181,6 +180,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                 break;
         }
     }
+
     private RefreshListenerAdapter refreshListenerAdapter = new RefreshListenerAdapter() {
 
         @Override
@@ -196,6 +196,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         OkGo
                 .post(url)
+                .cacheMode(com.lzy.okgo.cache.CacheMode.REQUEST_FAILED_READ_CACHE)
                 .execute(new SimpleCallback() {
 
                     @Override
@@ -206,21 +207,20 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
                     @Override
                     public void success(String s, Call call, Response response) {
-                        try {
-                            Type type = new TypeToken<List<Category>>() {
-                            }.getType();
-                            List<Category> data = new Gson().fromJson(s, type);
-                            categoryAdapter.notifyDataChanged(data);
-                            lvCategory.setItemChecked(0, true);
-                            emptyView.setEmptyView(categories);
-                        } catch (Exception e) {
-                            LoggerUtils.e(e);
+                    }
+
+                    @Override
+                    public void afterSuccess(String s) {
+                        super.afterSuccess(s);
+                        showCategoryData(s);
+                        if (!categories.isEmpty()) {
+                            initWaresLayout();
                         }
                     }
 
                     @Override
-                    public void error(Call call, Response response, Exception e) {
-                        super.error(call, response, e);
+                    public void afterError(Exception e) {
+                        super.afterError(e);
                         emptyView.setEmptyView(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -228,19 +228,20 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                             }
                         });
                     }
-
-                    @Override
-                    public void after(String s, Exception e) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!categories.isEmpty()) {
-                                    initWaresLayout();
-                                }
-                            }
-                        }, DELAYMILLIS_FOR_SHOW_EMPTY);
-                    }
                 });
+    }
+
+    private void showCategoryData(String s) {
+        try {
+            Type type = new TypeToken<List<Category>>() {
+            }.getType();
+            List<Category> data = new Gson().fromJson(s, type);
+            categoryAdapter.notifyDataChanged(data);
+            lvCategory.setItemChecked(0, true);
+            emptyView.setEmptyView(categories);
+        } catch (Exception e) {
+            LoggerUtil.e(e);
+        }
     }
 
     private void initWaresLayout() {
@@ -255,8 +256,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         rvWares.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rvWares.setAdapter(waresAdapter);
-        rvWares.addItemDecoration(new GridSpaceItemDecoration(2, UiUtils.dp2px(WARES_DIMEN_SMALL), true, true));
-        rvWares.addOnScrollListener(new ScrollListener());
+        rvWares.addItemDecoration(new GridSpaceItemDecoration(2, UiUtil.dp2px(DIMEN_SMALL), true, true));
 
         refreshLayout.setOnRefreshListener(refreshListenerAdapter);
         refreshLayout.startRefresh();
@@ -298,13 +298,13 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
         sliderLayout = ButterKnife.findById(header, R.id.slider_layout);
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sliderLayout.getLayoutParams();
-        params.height = UiUtils.dp2px(150);
+        params.height = UiUtil.dp2px(150);
         sliderLayout.setLayoutParams(params);
 
         View indicators = View.inflate(getActivity(), R.layout.indicators_default, null);
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtils.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
+        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtil.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
         params.alignWithParent = true;
-        params.rightMargin = UiUtils.dp2px(10);
+        params.rightMargin = UiUtil.dp2px(10);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         ((RelativeLayout) header).addView(indicators, params);
@@ -313,7 +313,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         sliderLayout.startAutoCycle(5000, 5000, true);
 
-        List<BaseSliderView> banners = new BannerBiz(getActivity()).getBanner();
+        List<BaseSliderView> banners = new BannerProvider(getActivity()).getBanner();
         for (BaseSliderView bannser : banners) {
             bannser.setOnSliderClickListener(new SliderClickListener(getActivity(), sliderLayout));
             sliderLayout.addSlider(bannser);

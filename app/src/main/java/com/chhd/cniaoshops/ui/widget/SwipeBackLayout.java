@@ -56,12 +56,12 @@ public class SwipeBackLayout extends ViewGroup {
     private static final float BACK_FACTOR = 0.5f;
 
     /**
-     * the anchor of calling finish.
+     * the anchor of calling after.
      */
     private float finishAnchor = 0;
 
     /**
-     * Set the anchor of calling finish.
+     * Set the anchor of calling after.
      *
      * @param offset
      */
@@ -72,7 +72,7 @@ public class SwipeBackLayout extends ViewGroup {
     private boolean enableFlingBack = true;
 
     /**
-     * Whether allow to finish activity by fling the layout.
+     * Whether allow to after activity by fling the layout.
      *
      * @param b
      */

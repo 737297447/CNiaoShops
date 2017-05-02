@@ -1,16 +1,5 @@
 package com.chhd.sharesdk;
 
-import android.content.Context;
-import android.view.View;
-
-import com.orhanobut.logger.Logger;
-
-import java.util.HashMap;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.framework.TitleLayout;
 import cn.sharesdk.framework.authorize.AuthorizeAdapter;
 
 /**

@@ -1,11 +1,10 @@
 package com.chhd.cniaoshops.ui.activity;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.graphics.Palette;
+import android.os.SystemClock;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -15,8 +14,8 @@ import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Tab;
-import com.chhd.cniaoshops.global.AppApplication;
-import com.chhd.cniaoshops.ui.base.activity.HideSoftInputActivity;
+import com.chhd.cniaoshops.global.App;
+import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.ui.fragment.CartFragment;
 import com.chhd.cniaoshops.ui.fragment.CategoryFragment;
 import com.chhd.cniaoshops.ui.fragment.HomeFragment;
@@ -24,14 +23,15 @@ import com.chhd.cniaoshops.ui.fragment.HotFragment;
 import com.chhd.cniaoshops.ui.fragment.MineFragment;
 import com.chhd.cniaoshops.ui.widget.CnToolbar;
 import com.chhd.cniaoshops.ui.widget.FragmentTabHost;
-import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class MainActivity extends HideSoftInputActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.cn_tool_bar)
     CnToolbar toolbar;
@@ -49,7 +49,7 @@ public class MainActivity extends HideSoftInputActivity {
 
         context = this;
 
-        AppApplication.isHotRun = true;
+        App.isHotRun = true;
 
         initTab();
 
@@ -109,4 +109,16 @@ public class MainActivity extends HideSoftInputActivity {
         return view;
     }
 
+    long[] mHits = new long[5];
+
+    @OnClick({R.id.cn_tool_bar})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.cn_tool_bar:
+                System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+                mHits[mHits.length - 1] = SystemClock.uptimeMillis();
+                if (mHits[0] >= (mHits[mHits.length - 1] - 2000)) return;
+                break;
+        }
+    }
 }

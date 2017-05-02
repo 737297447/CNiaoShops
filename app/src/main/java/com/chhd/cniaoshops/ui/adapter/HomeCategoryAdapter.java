@@ -1,6 +1,5 @@
 package com.chhd.cniaoshops.ui.adapter;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -10,7 +9,7 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.HomeCampaign;
 import com.chhd.cniaoshops.bean.HomeCategory;
 import com.chhd.cniaoshops.ui.base.adapter.SimpleMultiItemAdapter;
-import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.LoggerUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -63,7 +62,7 @@ public class HomeCategoryAdapter extends SimpleMultiItemAdapter<HomeCampaign, Ba
             holder.addOnClickListener(R.id.iv_small_bottom);
 
         } catch (Exception e) {
-            LoggerUtils.e(e);
+            LoggerUtil.e(e);
         }
 
     }

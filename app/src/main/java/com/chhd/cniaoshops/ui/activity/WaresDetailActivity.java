@@ -1,7 +1,5 @@
 package com.chhd.cniaoshops.ui.activity;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,18 +13,13 @@ import android.webkit.WebViewClient;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.biz.CartProvider;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.ui.widget.ProgressView;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.per_library.util.ToastUtils;
-import com.orhanobut.logger.Logger;
+import com.chhd.per_library.util.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -41,6 +34,7 @@ public class WaresDetailActivity extends BaseActivity {
     @BindView(R.id.progress_view)
     ProgressView progressView;
     @BindView(R.id.refresh_layout)
+
     PtrClassicFrameLayout refreshLayout;
 
     private String url = SERVER_URL + "wares/detail.html";
@@ -53,7 +47,7 @@ public class WaresDetailActivity extends BaseActivity {
 
         initActionBar();
 
-        wares = getIntent().getParcelableExtra("wares");
+        wares = (Wares) getIntent().getSerializableExtra("wares");
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -165,12 +159,12 @@ public class WaresDetailActivity extends BaseActivity {
 
         @JavascriptInterface
         public void addToCart(long id) {
-            new CartBiz().put(wares);
+            new CartProvider().put(wares);
         }
 
         @JavascriptInterface
         public void buy(long id) {
-            ToastUtils.makeText(R.string.buy_now);
+            ToastUtil.makeText(R.string.buy_now);
         }
     }
 }

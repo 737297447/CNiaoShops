@@ -3,32 +3,37 @@ package com.chhd.cniaoshops.ui.fragment;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Page;
 import com.chhd.cniaoshops.bean.Wares;
 import com.chhd.cniaoshops.global.Constant;
 import com.chhd.cniaoshops.http.OnResponse;
+import com.chhd.cniaoshops.http.SimpleCallback;
 import com.chhd.cniaoshops.ui.StatusEnum;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
 import com.chhd.cniaoshops.ui.adapter.HotWaresAdapter;
 import com.chhd.cniaoshops.ui.items.HotWaresItem;
 import com.chhd.cniaoshops.ui.items.ProgressItem;
-import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
 import com.chhd.cniaoshops.ui.widget.EmptyView;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.per_library.util.UiUtils;
+import com.chhd.cniaoshops.ui.widget.header.SinaRefreshView;
+import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.per_library.util.UiUtil;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.request.BaseRequest;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.CacheMode;
 import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
@@ -41,6 +46,7 @@ import butterknife.BindView;
 import eu.davidea.fastscroller.FastScroller;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import okhttp3.Call;
 
 /**
  * Created by CWQ on 2016/10/24.
@@ -48,7 +54,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 public class HotFragment extends BaseFragment implements Constant {
 
     @BindView(R.id.refresh_layout)
-    MaterialRefreshLayout refreshLayout;
+    TwinklingRefreshLayout refreshLayout;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.fast_scroller)
@@ -78,8 +84,13 @@ public class HotFragment extends BaseFragment implements Constant {
     }
 
     private void initView() {
-        refreshLayout.setMaterialRefreshListener(materialRefreshListener);
-        refreshLayout.setProgressColors(getProgressColors());
+
+        SinaRefreshView headerView = new SinaRefreshView(getActivity());
+        headerView.setArrowResource(R.mipmap.refresh_head_arrow);
+        refreshLayout.setHeaderView(headerView);
+        refreshLayout.setOnRefreshListener(refreshListenerAdapter);
+        LoadingView loadingView = new LoadingView(getActivity());
+        refreshLayout.setBottomView(loadingView);
 
         adatper = new HotWaresAdapter(items);
         progressItem = new ProgressItem(adatper, onClickListener);
@@ -87,20 +98,34 @@ public class HotFragment extends BaseFragment implements Constant {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adatper);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(WARES_DIMEN_NORMAL), true));
-        recyclerView.addOnScrollListener(new ScrollListener());
+        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtil.dp2px(DIMEN_NORMAL), SpaceItemDecoration.VERTICAL, true));
 
-        adatper.setFastScroller(fastScroller, UiUtils.getColor(R.color.colorAccent));//Setup FastScroller after the Adapter has been added to the RecyclerView.
+        adatper.setFastScroller(fastScroller, UiUtil.getColor(R.color.colorAccent));//Setup FastScroller after the Adapter has been added to the RecyclerView.
     }
 
     private void refresh() {
         refreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                refreshLayout.autoRefresh();
+                refreshLayout.startRefresh();
             }
         });
     }
+
+    private RefreshListenerAdapter refreshListenerAdapter = new RefreshListenerAdapter() {
+
+        @Override
+        public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+            super.onRefresh(refreshLayout);
+            refreshData();
+        }
+
+        @Override
+        public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+            super.onLoadMore(refreshLayout);
+            loadMoreData();
+        }
+    };
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -120,7 +145,7 @@ public class HotFragment extends BaseFragment implements Constant {
         int[] colors = new int[SWIPE_REFRESH_LAYOUT_COLORS.length];
 
         for (int i = 0; i < SWIPE_REFRESH_LAYOUT_COLORS.length; i++) {
-            colors[i] = UiUtils.getColor(SWIPE_REFRESH_LAYOUT_COLORS[i]);
+            colors[i] = UiUtil.getColor(SWIPE_REFRESH_LAYOUT_COLORS[i]);
         }
 
         return colors;
@@ -153,7 +178,7 @@ public class HotFragment extends BaseFragment implements Constant {
             if (curPage <= totalPage) {
                 loadMoreData();
             } else {
-                refreshLayout.finishRefreshLoadMore();
+                refreshLayout.finishLoadmore();
             }
         }
     };
@@ -173,54 +198,59 @@ public class HotFragment extends BaseFragment implements Constant {
 
         String url = SERVER_URL + "wares/hot";
 
-        Request<String> request = NoHttp.createStringRequest(url, RequestMethod.POST);
-        request.add("curPage", curPage);
-        request.add("pageSize", pageSize);
+        OkGo
+                .post(url)
+                .params("curPage", curPage)
+                .params("pageSize", pageSize)
+                .cacheMode(com.lzy.okgo.cache.CacheMode.REQUEST_FAILED_READ_CACHE)
+                .execute(new SimpleCallback() {
 
-        RequestQueue queue = NoHttp.newRequestQueue();
-        queue.add(0, request, new OnResponse<String>() {
-
-            @Override
-            public void succeed(int what, Response<String> response) {
-                try {
-                    curPage = ++curPage;
-                    Type type = new TypeToken<Page<Wares>>() {
-                    }.getType();
-                    Page<Wares> page = new Gson().fromJson(response.get(), type);
-                    totalPage = page.getTotalPage();
-                    showData(page);
-                    emptyView.setEmptyView(items);
-                } catch (Exception e) {
-                    LoggerUtils.e(e, response);
-                }
-            }
-
-            @Override
-            public void failed(int what, Response<String> response) {
-                super.failed(what, response);
-                fail();
-                emptyView.setEmptyView(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        requestData();
+                    public void success(String s, Call call, okhttp3.Response response) {
+                    }
+
+                    @Override
+                    public void after(String s, Exception e) {
+                        finishRefresh();
+                    }
+
+                    @Override
+                    public void afterSuccess(String s) {
+                        super.afterSuccess(s);
+                        curPage = ++curPage;
+                        Type type = new TypeToken<Page<Wares>>() {
+                        }.getType();
+                        Page<Wares> page = new Gson().fromJson(s, type);
+                        totalPage = page.getTotalPage();
+                        showData(page);
+                        emptyView.setEmptyView(items);
+                    }
+
+                    @Override
+                    public void afterError(Exception e) {
+                        super.afterError(e);
+                        if (items.size() > 0) {
+                            progressItem.setStatus(StatusEnum.ON_EMPTY);
+                            adatper.onLoadMoreComplete(null, 2000);
+                        } else {
+                            emptyView.setEmptyView(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    requestData();
+                                }
+                            });
+                        }
                     }
                 });
-            }
-
-            @Override
-            public void finish(int what) {
-                finishRefresh();
-            }
-        });
     }
 
     private void finishRefresh() {
         switch (state) {
             case ON_NORMAL:
-                refreshLayout.finishRefresh();
+                refreshLayout.finishRefreshing();
                 break;
             case ON_LOAD_MORE:
-                refreshLayout.finishRefreshLoadMore();
+                refreshLayout.finishLoadmore();
                 break;
         }
     }

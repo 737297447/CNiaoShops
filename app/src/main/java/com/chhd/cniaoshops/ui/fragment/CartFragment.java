@@ -1,7 +1,6 @@
 package com.chhd.cniaoshops.ui.fragment;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -19,14 +18,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.biz.CartProvider;
+import com.chhd.cniaoshops.ui.activity.CreateOrderActivity;
 import com.chhd.cniaoshops.ui.activity.WaresDetailActivity;
 import com.chhd.cniaoshops.ui.adapter.CartAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
-import com.chhd.cniaoshops.ui.listener.clazz.ScrollListener;
 import com.chhd.cniaoshops.ui.widget.CnToolbar;
-import com.chhd.cniaoshops.util.DialogUtils;
-import com.chhd.per_library.util.UiUtils;
+import com.chhd.cniaoshops.util.DialogUtil;
+import com.chhd.per_library.util.UiUtil;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.container.MeituanHeader;
 import com.liaoinstan.springview.widget.SpringView;
@@ -86,7 +85,7 @@ public class CartFragment extends BaseFragment {
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(onFreshListener);
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiUtils.dp2px(50));
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiUtil.dp2px(50));
         View footerView = new View(getActivity());
         footerView.setLayoutParams(params);
 
@@ -97,7 +96,6 @@ public class CartFragment extends BaseFragment {
 
         rvShoppingcart.setAdapter(adapter);
         rvShoppingcart.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvShoppingcart.addOnScrollListener(new ScrollListener());
     }
 
 
@@ -105,20 +103,29 @@ public class CartFragment extends BaseFragment {
         @Override
         public void onItemChildLongClick(final BaseQuickAdapter adapter, View view, int position) {
             final int pos = position;
-            DialogUtils
+            DialogUtil
                     .newBuilder(getActivity())
                     .title(R.string.operate)
-                    .items(Html.fromHtml(String.format("<font color='#FF0000'>%s</font>", getString(R.string.delete))))
+                    .items(Html.fromHtml(String.format("<font color='#999999'>%s</font>", getString(R.string.delete))))
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                            new CartBiz().delete(carts.get(pos));
+                            new CartProvider().delete(carts.get(pos));
                             adapter.remove(pos);
+                            checkbox.setChecked(isCheckAll());
+                            setBottomStauts();
                         }
                     })
                     .show();
         }
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        showData();
+    }
 
     private SpringView.OnFreshListener onFreshListener = new SpringView.OnFreshListener() {
         @Override
@@ -154,8 +161,10 @@ public class CartFragment extends BaseFragment {
                     startActivity(intent);
                     break;
                 case R.id.btn_delete:
-                    new CartBiz().delete(carts.get(position));
+                    new CartProvider().delete(carts.get(position));
                     adapter.remove(position);
+                    checkbox.setChecked(isCheckAll());
+                    setBottomStauts();
                     break;
             }
             showTotalPrice();
@@ -230,9 +239,7 @@ public class CartFragment extends BaseFragment {
     private void showEditControl() {
         rightButton.setTag(ACTION_EDIT);
         rightButton.setText(R.string.complete);
-        checkbox.setChecked(false);
         btnSettlement.setText(R.string.delete);
-        checkAll(false);
     }
 
     /**
@@ -241,9 +248,7 @@ public class CartFragment extends BaseFragment {
     private void hideEditControl() {
         rightButton.setTag(ACTION_NORMAL);
         rightButton.setText(R.string.edit);
-        checkbox.setChecked(true);
         btnSettlement.setText(R.string.go_settlement);
-        checkAll(true);
     }
 
     private void checkAll(boolean isChecked) {
@@ -256,10 +261,12 @@ public class CartFragment extends BaseFragment {
     private void showData() {
         hideEditControl();
         carts.clear();
-        carts.addAll(new CartBiz().getAll());
+        carts.addAll(new CartProvider().getAll());
         adapter.notifyDataSetChanged();
         adapter.setCustomEmptyView();
+        checkbox.setChecked(isCheckAll());
         showTotalPrice();
+        setBottomStauts();
     }
 
     @OnClick({R.id.check_box, R.id.btn_settlement})
@@ -271,6 +278,15 @@ public class CartFragment extends BaseFragment {
             case R.id.btn_settlement:
                 int action = (int) rightButton.getTag();
                 if (action == ACTION_NORMAL) {
+                    ArrayList<ShoppingCart> newList = new ArrayList<>();
+                    for (ShoppingCart cart : carts) {
+                        if (cart.isChecked()) {
+                            newList.add(cart);
+                        }
+                    }
+                    Intent intent = new Intent(getActivity(), CreateOrderActivity.class);
+                    intent.putExtra("carts", newList);
+                    startActivity(intent);
                 } else {
                     delCarts();
                 }
@@ -280,12 +296,22 @@ public class CartFragment extends BaseFragment {
     }
 
     private boolean isCheckAll() {
-        for (ShoppingCart cart : carts) {
-            if (!cart.isChecked()) {
-                return false;
+        if (carts.size() > 0) {
+            for (ShoppingCart cart : carts) {
+                if (!cart.isChecked()) {
+                    return false;
+                }
             }
+            return true;
+        } else {
+            return false;
         }
-        return true;
+    }
+
+    private void setBottomStauts() {
+        boolean enabled = carts.size() > 0 ? true : false;
+        checkbox.setEnabled(enabled);
+        btnSettlement.setEnabled(enabled);
     }
 
     private void delCarts() {
@@ -295,8 +321,10 @@ public class CartFragment extends BaseFragment {
                 int position = carts.indexOf(cart);
                 iterator.remove();
                 adapter.notifyItemRemoved(position);
-                new CartBiz().delete(cart);
+                new CartProvider().delete(cart);
             }
         }
+        checkbox.setChecked(isCheckAll());
+        setBottomStauts();
     }
 }

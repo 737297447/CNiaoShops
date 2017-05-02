@@ -31,5 +31,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.jakewharton:butterknife:${rootProject.butterknifeLibsVersion}"
     apt "com.jakewharton:butterknife-compiler:${rootProject.butterknifeLibsVersion}"
-    compile 'com.google.code.gson:gson:2.8.0'
 }

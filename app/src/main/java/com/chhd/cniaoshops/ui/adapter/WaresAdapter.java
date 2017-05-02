@@ -1,7 +1,6 @@
 package com.chhd.cniaoshops.ui.adapter;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.biz.CartProvider;
 import com.chhd.cniaoshops.ui.activity.WaresDetailActivity;
 import com.chhd.cniaoshops.ui.base.adapter.SimpleAdapter;
 import com.squareup.picasso.Picasso;
@@ -70,7 +69,7 @@ public class WaresAdapter extends SimpleAdapter<Wares, BaseViewHolder> {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_buy:
-                    new CartBiz().put(getData().get(pos));
+                    new CartProvider().put(getData().get(pos - getHeaderLayoutCount()));
                     break;
                 default:
                     Intent intent = new Intent(mContext, WaresDetailActivity.class);

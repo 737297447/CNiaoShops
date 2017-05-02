@@ -3,18 +3,19 @@ package com.chhd.cniaoshops.http;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Config;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.DialogUtils;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.cniaoshops.util.ToastyUtils;
+import com.chhd.cniaoshops.util.DialogUtil;
+import com.chhd.cniaoshops.util.ToastyUtil;
 import com.orhanobut.logger.Logger;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Response;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +26,7 @@ import java.util.Set;
 
 public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
 
-    private boolean isToastError = true;
+    private boolean isToastError = false;
     private int delayMillis = DELAYMILLIS_FOR_RQUEST_FINISH;
     private long startTimeMillis;
     private Context progressDialog;
@@ -50,7 +51,7 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     public final void onStart(int what) {
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
-            dialog = DialogUtils.newProgressDialog(progressDialog);
+            dialog = DialogUtil.newProgressDialog(progressDialog);
             dialog.show();
         }
         start(what);
@@ -92,7 +93,7 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     public final void onFinish(final int what) {
         long timeDif = getTimeDif();
         if (timeDif > delayMillis) {
-            finish(what);
+            after(what);
             if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
             }
@@ -100,7 +101,7 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    finish(what);
+                    after(what);
                     if (dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
@@ -120,12 +121,12 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     public abstract void succeed(int what, Response<T> response);
 
     public void failed(int what, Response<T> response) {
-        if (isToastError) {
-            ToastyUtils.error(R.string.network_connect_fail);
+        if (isToastError || progressDialog != null) {
+            ToastyUtil.error(R.string.network_connect_fail);
         }
     }
 
-    public void finish(int what) {
+    public void after(int what) {
     }
 
     /**
@@ -136,11 +137,12 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     private void d(Response<?> response) {
         if (Config.isDebug) {
             Set<Map.Entry<String, List<Object>>> entries = response.request().getParamKeyValues().entrySet();
-            String params = entries.isEmpty() ? "" : "params:\t" + formatParamsStr(entries) + "\n\n";
+            String params = entries.isEmpty() ? "" : formatParamsStr(entries);
             String message =
                     "url:\t\t" + response.request().url()
                             + "\n\n"
                             + params
+                            + "\n\n"
                             + "json:\t" + response.get();
             Logger.d(message);
         }
@@ -154,11 +156,12 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     private void e(Response<?> response) {
         if (Config.isDebug) {
             Set<Map.Entry<String, List<Object>>> entries = response.request().getParamKeyValues().entrySet();
-            String params = entries.isEmpty() ? "" : "params:\t" + formatParamsStr(entries) + "\n\n";
+            String params = entries.isEmpty() ? "" : formatParamsStr(entries);
             String message =
                     "url:\t\t" + response.request().url()
                             + "\n\n"
                             + params
+                            + "\n\n"
                             + "xml:\t" + response.get()
                             + "\n\n"
                             + "error";
@@ -167,6 +170,15 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     }
 
     private String formatParamsStr(Set<Map.Entry<String, List<Object>>> entries) {
-        return entries.toString().replace("[", "").replace("]", "").replace(", ", "\n" + "params:\t");
+        StringBuilder builder = new StringBuilder("");
+        Iterator<Map.Entry<String, List<Object>>> iterator = entries.iterator();
+        while (iterator.hasNext()) {
+            if (!TextUtils.isEmpty(builder)) {
+                builder.append("\n");
+            }
+            Map.Entry<String, List<Object>> next = iterator.next();
+            builder.append("params:\t" + next.getKey() + " = " + next.getValue());
+        }
+        return builder.toString();
     }
 }

@@ -1,6 +1,5 @@
 package com.chhd.cniaoshops.ui.items;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.biz.CartBiz;
+import com.chhd.cniaoshops.biz.CartProvider;
 import com.chhd.cniaoshops.ui.activity.WaresDetailActivity;
 import com.squareup.picasso.Picasso;
 
@@ -75,7 +74,7 @@ public class HotWaresItem extends AbstractFlexibleItem<HotWaresItem.Holder> impl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_buy:
-                new CartBiz().put(wares);
+                new CartProvider().put(wares);
                 break;
             default:
                 Intent intent = new Intent(v.getContext(), WaresDetailActivity.class);

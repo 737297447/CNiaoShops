@@ -1,5 +1,6 @@
 package com.chhd.cniaoshops.ui.base.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,9 @@ import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.chhd.cniaoshops.R;
+import com.chhd.cniaoshops.global.App;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.ui.activity.LoginActivity;
 
 import butterknife.ButterKnife;
 
@@ -89,6 +91,20 @@ public abstract class BaseFragment extends Fragment implements Constant {
         LottieAnimationView emptyAnimView = (LottieAnimationView) rootView.findViewById(R.id.empty_animation_view);
         if (emptyAnimView != null && emptyAnimView.isAnimating()) {
             emptyAnimView.cancelAnimation();
+        }
+    }
+
+    protected void startActivity(Intent intent, boolean isRequireLogin) {
+        if (isRequireLogin) {
+            if (App.user != null) {
+                super.startActivity(intent);
+            } else {
+                App.intent = intent;
+                Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                super.startActivity(loginIntent);
+            }
+        } else {
+            super.startActivity(intent);
         }
     }
 }

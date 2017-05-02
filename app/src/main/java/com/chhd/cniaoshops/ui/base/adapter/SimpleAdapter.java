@@ -1,7 +1,6 @@
 package com.chhd.cniaoshops.ui.base.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,10 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chhd.cniaoshops.R;
-import com.chhd.cniaoshops.ui.StatusEnum;
-import com.chhd.cniaoshops.util.LoggerUtils;
-import com.chhd.cniaoshops.util.ToastyUtils;
+import com.chhd.cniaoshops.global.Constant;
+import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.cniaoshops.util.ToastyUtil;
+import com.chhd.per_library.util.UiUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by CWQ on 2017/3/26.
  */
 
-public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
+public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> implements Constant {
 
     protected RecyclerView recyclerView;
     private Context context;
@@ -34,6 +34,10 @@ public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQui
     private TextView tvNone;
     private TextView tvError;
     private TextView tvLoading;
+
+    public SimpleAdapter(int layoutResId, List<T> data) {
+        super(layoutResId, data);
+    }
 
     public SimpleAdapter(RecyclerView recyclerView, List<T> data) {
         super(data);
@@ -80,7 +84,7 @@ public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQui
             if (isLoadMoreEnable()) {
                 loadMoreEnd();
             } else {
-                ToastyUtils.warning(R.string.no_to_more);
+                ToastyUtil.warning(R.string.no_to_more);
             }
         }
     }
@@ -88,7 +92,7 @@ public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQui
     @Override
     public void remove(int position) {
         super.remove(position);
-        LoggerUtils.i("size: " + getData().size());
+        LoggerUtil.i("size: " + getData().size());
         if (animationView != null) {
             if (getData().size() == 0 && !animationView.isAnimating()) {
                 animationView.playAnimation();
@@ -225,7 +229,7 @@ public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQui
         if (getFooterLayout() != null) {
             footerLayoutHeight = getFooterLayout().getHeight();
         }
-        int height = recyclerView.getHeight() - headerLayoutHeight - footerLayoutHeight;
+        int height = (int) (recyclerView.getHeight() - headerLayoutHeight - footerLayoutHeight - recyclerView.getHeight() * 0.1);
         return height;
     }
 }

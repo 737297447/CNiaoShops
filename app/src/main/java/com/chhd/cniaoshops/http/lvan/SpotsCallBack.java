@@ -3,7 +3,7 @@ package com.chhd.cniaoshops.http.lvan;
 import android.content.Context;
 
 import com.chhd.cniaoshops.R;
-import com.chhd.per_library.util.UiUtils;
+import com.chhd.per_library.util.UiUtil;
 
 import dmax.dialog.SpotsDialog;
 import okhttp3.Request;
@@ -20,7 +20,7 @@ public abstract class SpotsCallBack<T> extends BaseCallback<T> {
     }
 
     private void initSpotsDialog() {
-        mDialog = new SpotsDialog(mContext, UiUtils.getString(R.string.loading));
+        mDialog = new SpotsDialog(mContext, UiUtil.getString(R.string.loading));
     }
 
     public void showDialog() {

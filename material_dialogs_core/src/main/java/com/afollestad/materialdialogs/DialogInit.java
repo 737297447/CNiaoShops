@@ -293,7 +293,6 @@ class DialogInit {
     dialog.positiveButton.setTag(DialogAction.POSITIVE);
     dialog.positiveButton.setOnClickListener(dialog);
     dialog.positiveButton.setVisibility(View.VISIBLE);
-    dialog.positiveButton.setAllCaps(false);
 
     MDButton negativeTextView = dialog.negativeButton;
     dialog.setTypeface(negativeTextView, builder.mediumFont);
@@ -306,7 +305,6 @@ class DialogInit {
     dialog.negativeButton.setTag(DialogAction.NEGATIVE);
     dialog.negativeButton.setOnClickListener(dialog);
     dialog.negativeButton.setVisibility(View.VISIBLE);
-    dialog.negativeButton.setAllCaps(false);
 
     MDButton neutralTextView = dialog.neutralButton;
     dialog.setTypeface(neutralTextView, builder.mediumFont);
@@ -318,7 +316,6 @@ class DialogInit {
     dialog.neutralButton.setTag(DialogAction.NEUTRAL);
     dialog.neutralButton.setOnClickListener(dialog);
     dialog.neutralButton.setVisibility(View.VISIBLE);
-    dialog.neutralButton.setAllCaps(false);
 
     // Setup list dialog stuff
     if (builder.listCallbackMultiChoice != null) {

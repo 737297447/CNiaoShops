@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chhd.cniaoshops.R;
-import com.chhd.cniaoshops.util.LoggerUtils;
 
 /**
  * Created by CWQ on 2017/3/30.

@@ -2,15 +2,10 @@ package com.chhd.cniaoshops.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import com.chhd.cniaoshops.R;
-import com.chhd.per_library.util.UiUtils;
 
 /**
  * Created by CWQ on 2017/4/11.

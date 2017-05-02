@@ -26,15 +26,14 @@
             android:transitionName="img" />
 
         <RelativeLayout
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent">
 
             <com.liuguangqiang.progressbar.CircleProgressBar
                 android:id="@+id/circle_progress_bar"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_centerInParent="true"
-                android:layout_margin="5dp"
                 app:background_color="@android:color/transparent"
                 app:progress="0"
                 app:progress_color="@android:color/white"
@@ -43,11 +42,11 @@
             <ImageView
                 android:id="@+id/iv_back"
                 style="?attr/actionModeCloseButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:clickable="true"
-                android:src="@drawable/ic_arrow_back_white_24dp" />
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:contentDescription="@string/abc_action_mode_done"
+                android:focusable="true"
+                app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
 
         </RelativeLayout>
 

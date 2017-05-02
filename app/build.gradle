@@ -1,15 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'android-apt'
 
 android {
     signingConfigs {
-        config {
+        release {
             keyAlias 'cwq'
             keyPassword '123456'
-            storeFile file('D:/安卓开发/develop.jks')
+            storeFile file('../develop.jks')
             storePassword '123456'
         }
     }
+    //**兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
+    useLibrary 'org.apache.http.legacy'
     compileSdkVersion rootProject.ext.compileSdkVersion as Integer
     buildToolsVersion rootProject.ext.buildToolsVersion as String
     defaultConfig {
@@ -18,16 +21,34 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion as Integer
         versionCode 1
         versionName "1.0"
-        signingConfig signingConfigs.config
+        signingConfig signingConfigs.release
+        multiDexEnabled true
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.release
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     productFlavors {
+        dev {
+            // Enable pre-dexing to produce an APK that can be tested on
+            // Android 5.0+ without the time-consuming DEX build processes.
+            minSdkVersion 21
+        }
+        prod {
+            // The actual minSdkVersion for the production version.
+            minSdkVersion rootProject.ext.minSdkVersion as Integer
+        }
     }
 }
 
@@ -36,12 +57,23 @@ dependencies {
     compile "com.jakewharton:butterknife:${rootProject.butterknifeLibsVersion}"
     apt "com.jakewharton:butterknife-compiler:${rootProject.butterknifeLibsVersion}"
     compile "com.squareup.picasso:picasso:${rootProject.picassoLibsVersion}"
-    compile "com.android.support:appcompat-v7:${rootProject.supportLibsVersion}"
     compile "com.android.support:support-v4:${rootProject.supportLibsVersion}"
     compile "com.android.support:recyclerview-v7:${rootProject.supportLibsVersion}"
     compile "com.android.support:cardview-v7:${rootProject.supportLibsVersion}"
     compile "com.android.support:design:${rootProject.supportLibsVersion}"
-    compile "com.android.support:palette-v7:${rootProject.supportLibsVersion}"
+    compile project(':toasty')
+    compile project(':per_library')
+    compile project(':image_slider')
+    compile project(':material_dialogs_core')
+    compile project(':ptr-lib')
+    compile project(':sharesdk')
+    compile files('libs/BmobSDK_3.5.3_20161116.jar')
+//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+        transitive = true;
+    }
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.orhanobut:logger:1.15'
     compile 'com.nineoldandroids:library:2.4.0'
@@ -51,7 +83,7 @@ dependencies {
     compile 'eu.davidea:flexible-adapter:5.0.0-rc1'
     compile 'eu.davidea:flipview:1.1.2'
     compile 'com.lcodecorex:tkrefreshlayout:1.0.6'
-    compile 'com.airbnb.android:lottie:1.5.3'
+    compile 'com.airbnb.android:lottie:2.0.0-beta1'
     compile 'com.alibaba:fastjson:1.2.28'
     compile 'com.wang.avi:library:2.1.3'
     compile 'com.cjj.materialrefeshlayout:library:1.3.0'
@@ -65,14 +97,26 @@ dependencies {
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'com.lzy.widget:view-core:0.2.2'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'com.squareup.okio:okio:1.7.0'
+    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
+    compile 'com.yanzhenjie:album:1.0.5'
+    compile 'com.yalantis:ucrop:2.2.0-native'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.yanzhenjie:permission:1.0.5'
+    compile 'com.pingxx:pingpp-core:2.1.9'
+    compile 'com.pingxx:pingpp-wxpay:2.1.9'
+    compile 'com.pingxx:pingpp-alipay:2.1.9'
+    compile 'com.contrarywind:Android-PickerView:3.2.4'
+    compile 'com.zhy:base-adapter:3.0.3'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.amap.api:map3d-native:latest.integration'
+    compile 'com.amap.api:location:latest.integration'
+    compile 'com.amap.api:map3d:latest.integration'
+    compile 'com.amap.api:search:latest.integration'
+    compile 'com.lzy.widget:ninegridview:0.2.0'
     testCompile 'junit:junit:4.12'
-    compile project(':toasty')
-    compile project(':per_library')
-    compile project(':image_slider')
-    compile project(':material_dialogs_core')
-    compile project(':ptr-lib')
-    compile project(':sharesdk')
 }

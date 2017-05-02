@@ -25,27 +25,13 @@ public abstract class HideSoftInputActivity extends BaseActivity {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 View view = getCurrentFocus();
-
-                if (view != null && (view instanceof EditText)) {
-                    curEditText = (EditText) view;
-                }
-
                 if (isShouldHideSoftInput(view, ev)) {
-
                     hideSoftInput(view.getWindowToken());
-
-                    if (curEditText != null) {
-                        curEditText.clearFocus();
-                    }
-
                 }
-
                 break;
         }
         return super.dispatchTouchEvent(ev);
     }
-
-    private EditText curEditText;
 
     /**
      * 判断是否隐藏软键盘
@@ -54,7 +40,7 @@ public abstract class HideSoftInputActivity extends BaseActivity {
      * @param event
      * @return
      */
-    private boolean isShouldHideSoftInput(View view, MotionEvent event) {
+    protected boolean isShouldHideSoftInput(View view, MotionEvent event) {
         if (view != null && (view instanceof EditText)) {
             int[] outLocation = {0, 0};
             view.getLocationInWindow(outLocation);
@@ -76,7 +62,7 @@ public abstract class HideSoftInputActivity extends BaseActivity {
      *
      * @param token
      */
-    private void hideSoftInput(IBinder token) {
+    protected void hideSoftInput(IBinder token) {
         if (token != null) {
             InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);

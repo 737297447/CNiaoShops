@@ -18,7 +18,6 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.base.activity.SwipeBackActivity;
 import com.chhd.cniaoshops.ui.fragment.PicFragment;
 import com.chhd.cniaoshops.ui.listener.PageChangeListener;
-import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.ui.base.SimpleFmPagerAdapter;
 import com.liuguangqiang.progressbar.CircleProgressBar;
 import com.squareup.picasso.Picasso;
@@ -42,13 +41,10 @@ public class HorScrollPicActivity extends SwipeBackActivity {
 
     private List<Fragment> fragments = new ArrayList<>();
     private String[] imgUrls;
-    private HorScrollPicActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        instance = this;
 
         imgUrls = getIntent().getStringArrayExtra("imgUrls");
         final int pos = getIntent().getIntExtra("pos", 0);
@@ -64,13 +60,13 @@ public class HorScrollPicActivity extends SwipeBackActivity {
 
         tvPage.setText(String.format("%1$s / %2$s", pos + 1, imgUrls.length));
 
-        Picasso
-                .with(instance)
-                .load(imgUrls[pos])
-                .config(Bitmap.Config.RGB_565)
-                .into(ivPic);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Picasso
+                    .with(this)
+                    .load(imgUrls[pos])
+                    .config(Bitmap.Config.RGB_565)
+                    .into(ivPic);
+            ivPic.setVisibility(View.VISIBLE);
             Transition transition = getWindow().getSharedElementEnterTransition();
             transition.addListener(new Transition.TransitionListener() {
 
@@ -106,6 +102,8 @@ public class HorScrollPicActivity extends SwipeBackActivity {
 
                 }
             });
+        } else {
+            ivPic.setVisibility(View.GONE);
         }
 
         setEnableSwipe(false);
@@ -138,7 +136,7 @@ public class HorScrollPicActivity extends SwipeBackActivity {
         @Override
         public void onPageSelected(int position) {
             Picasso
-                    .with(instance)
+                    .with(context)
                     .load(imgUrls[position])
                     .config(Bitmap.Config.RGB_565)
                     .into(ivPic);

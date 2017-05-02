@@ -7,8 +7,8 @@ import android.os.Bundle;
 import com.airbnb.lottie.LottieAnimationView;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
-import com.chhd.cniaoshops.global.AppApplication;
-import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.global.App;
+import com.chhd.cniaoshops.util.LoggerUtil;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (AppApplication.isHotRun) {
+        if (App.isHotRun) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
@@ -74,7 +74,7 @@ public class SplashActivity extends BaseActivity {
                         });
                     }
                 } catch (Exception e) {
-                    LoggerUtils.e(e);
+                    LoggerUtil.e(e);
                 }
             }
         }.start();
