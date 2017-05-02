@@ -68,9 +68,9 @@ dependencies {
     compile project(':ptr-lib')
     compile project(':sharesdk')
     compile files('libs/BmobSDK_3.5.3_20161116.jar')
-//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
         transitive = true;
     }
