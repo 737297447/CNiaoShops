@@ -23,8 +23,8 @@ import com.chhd.cniaoshops.ui.activity.address.AddressListActivity;
 import com.chhd.cniaoshops.ui.adapter.WaresOrderAdapter;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.ui.decoration.DividerItemDecoration;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
 import com.lzy.okgo.OkGo;
 import com.pingplusplus.android.Pingpp;
 
@@ -36,7 +36,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobUser;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -132,7 +131,7 @@ public class CreateOrderActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.btn_pay:
                 if (address == null) {
-                    ToastyUtil.warning(R.string.please_fill_in_the_receiving_address);
+                    ToastyUtils.warning(R.string.please_fill_in_the_receiving_address);
                     return;
                 }
                 requestCreateOrder();
@@ -197,17 +196,17 @@ public class CreateOrderActivity extends BaseActivity {
             String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
 
             int status;
-            LoggerUtil.i("result: " + result);
+            LoggerUtils.i("result: " + result);
             switch (result) {
                 case "success":
                     status = Order.STATUS_PAY_SUCCESS;
                     break;
                 case "fail":
-                    ToastyUtil.error(errorMsg);
+                    ToastyUtils.error(errorMsg);
                     status = Order.STATUS_PAY_FAIL;
                     break;
                 default:
-                    ToastyUtil.warning(errorMsg);
+                    ToastyUtils.warning(errorMsg);
                     status = Order.STATUS_PAY_WAIT;
                     break;
             }

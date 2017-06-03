@@ -6,8 +6,8 @@ import android.os.Handler;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.cniaoshops.util.LoggerUtils;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public abstract class SimpleFindListener<T> extends FindListener<T> implements C
     public final void onBefore() {
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
-            dialog = DialogUtil.newProgressDialog(progressDialog);
+            dialog = DialogUtils.newProgressDialog(progressDialog);
             dialog.show();
         }
         before();
@@ -63,7 +63,7 @@ public abstract class SimpleFindListener<T> extends FindListener<T> implements C
             if (e == null) {
                 success(list);
             } else {
-                LoggerUtil.e(e);
+                LoggerUtils.e(e);
                 error(e);
             }
             onAfter();

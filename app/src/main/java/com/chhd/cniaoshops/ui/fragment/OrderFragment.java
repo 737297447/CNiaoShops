@@ -1,23 +1,17 @@
 package com.chhd.cniaoshops.ui.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Order;
 import com.chhd.cniaoshops.ui.adapter.OrderAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,24 +48,24 @@ public class OrderFragment extends BaseFragment {
     private void initData() {
         String title = getArguments().getString("title");
         List<Order> list = (List<Order>) getArguments().getSerializable("orders");
-        if (title.equals(UiUtil.getString(R.string.whole))) {
+        if (title.equals(UiUtils.getString(R.string.whole))) {
             orders.addAll(list);
         }
-        if (title.equals(UiUtil.getString(R.string.unpaid))) {
+        if (title.equals(UiUtils.getString(R.string.unpaid))) {
             for (Order order : list) {
                 if (order.getStatus() == Order.STATUS_PAY_WAIT) {
                     orders.add(order);
                 }
             }
         }
-        if (title.equals(UiUtil.getString(R.string.pay_success))) {
+        if (title.equals(UiUtils.getString(R.string.pay_success))) {
             for (Order order : list) {
                 if (order.getStatus() == Order.STATUS_PAY_SUCCESS) {
                     orders.add(order);
                 }
             }
         }
-        if (title.equals(UiUtil.getString(R.string.pay_fail))) {
+        if (title.equals(UiUtils.getString(R.string.pay_fail))) {
             for (Order order : list) {
                 if (order.getStatus() == Order.STATUS_PAY_FAIL) {
                     orders.add(order);
@@ -93,6 +87,6 @@ public class OrderFragment extends BaseFragment {
         adapter.setCustomEmptyView();
         rvOrder.setAdapter(adapter);
         rvOrder.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvOrder.addItemDecoration(new SpaceItemDecoration(UiUtil.dp2px(5), SpaceItemDecoration.VERTICAL, 0, UiUtil.dp2px(5), 0, 0));
+        rvOrder.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(5), SpaceItemDecoration.VERTICAL, 0, UiUtils.dp2px(5), 0, 0));
     }
 }

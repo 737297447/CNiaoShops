@@ -9,11 +9,11 @@ import java.lang.reflect.Type;
  * Created by CWQ on 2017/4/3.
  */
 
-public class JsonUtil {
+public class JsonUtils {
 
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
-    private JsonUtil() {
+    private JsonUtils() {
     }
 
     public static <T> T fromJson(String json, Type type) {

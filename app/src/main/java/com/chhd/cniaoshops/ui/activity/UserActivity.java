@@ -1,12 +1,8 @@
 package com.chhd.cniaoshops.ui.activity;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -22,31 +18,24 @@ import com.chhd.cniaoshops.global.App;
 import com.chhd.cniaoshops.http.bmob.SimpleUpdateListener;
 import com.chhd.cniaoshops.http.bmob.SimpleUploadListener;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.cniaoshops.util.JsonUtil;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.per_library.util.UiUtil;
-import com.chhd.per_library.util.UriUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.per_library.util.UiUtils;
+import com.chhd.per_library.util.UriUtils;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 import com.yanzhenjie.album.Album;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UploadFileListener;
 
 public class UserActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
@@ -84,7 +73,7 @@ public class UserActivity extends BaseActivity implements ObservableScrollViewCa
                     .with(this)
                     .load(App.user.getAvatar().getUrl())
                     .centerCrop()
-                    .resize(UiUtil.dp2px(45), UiUtil.dp2px(45))
+                    .resize(UiUtils.dp2px(45), UiUtils.dp2px(45))
                     .into(ivAvatar);
         }
         tvNickname.setText(App.user.getNickname());
@@ -133,8 +122,8 @@ public class UserActivity extends BaseActivity implements ObservableScrollViewCa
                 Album.album(this)
                         .requestCode(REQUEST_FROM_ALBUM) // 请求码，返回时onActivityResult()的第一个参数。
                         .title(getString(R.string.picture)) // 配置title。
-                        .toolBarColor(UiUtil.getColor(R.color.colorAccent)) // Toolbar 颜色，默认蓝色。
-                        .statusBarColor(UiUtil.getColor(R.color.colorAccent)) // StatusBar 颜色，默认蓝色。
+                        .toolBarColor(UiUtils.getColor(R.color.colorAccent)) // Toolbar 颜色，默认蓝色。
+                        .statusBarColor(UiUtils.getColor(R.color.colorAccent)) // StatusBar 颜色，默认蓝色。
                         .selectCount(1) // 最多选择几张图片。
                         .columnCount(3) // 相册展示列数，默认是2列。
                         .camera(true) // 是否有拍照功能。
@@ -160,13 +149,13 @@ public class UserActivity extends BaseActivity implements ObservableScrollViewCa
                 if (resultCode == RESULT_OK) {
                     String path = Album.parseResult(data).get(0);
                     String destinationFileName = "avater.png";
-                    crop(UriUtil.getImageContentUri(new File(path)), Uri.fromFile(new File(getCacheDir(), destinationFileName)));
+                    crop(UriUtils.getImageContentUri(new File(path)), Uri.fromFile(new File(getCacheDir(), destinationFileName)));
                 }
                 break;
             case UCrop.REQUEST_CROP:
                 if (resultCode == RESULT_OK) {
                     final Uri uri = UCrop.getOutput(data);
-                    final BmobFile file = new BmobFile(UriUtil.getFileFromContentUri(uri));
+                    final BmobFile file = new BmobFile(UriUtils.getFileFromContentUri(uri));
                     file.upload(new SimpleUploadListener(context) {
                         @Override
                         public void success() {
@@ -193,8 +182,8 @@ public class UserActivity extends BaseActivity implements ObservableScrollViewCa
     private void crop(Uri source, Uri destination) {
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-        options.setStatusBarColor(UiUtil.getColor(R.color.colorAccent));
-        options.setToolbarColor(UiUtil.getColor(R.color.colorAccent));
+        options.setStatusBarColor(UiUtils.getColor(R.color.colorAccent));
+        options.setToolbarColor(UiUtils.getColor(R.color.colorAccent));
         options.setHideBottomControls(true);
         UCrop
                 .of(source, destination)
@@ -205,7 +194,7 @@ public class UserActivity extends BaseActivity implements ObservableScrollViewCa
     }
 
     private void showInputDialog() {
-        DialogUtil
+        DialogUtils
                 .newBuilder(this)
                 .title(R.string.nickname)
                 .input("", App.user.getNickname(), false, new MaterialDialog.InputCallback() {

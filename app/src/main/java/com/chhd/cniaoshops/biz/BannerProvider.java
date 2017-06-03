@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
@@ -32,8 +32,8 @@ public class BannerProvider implements Constant {
 
         List<BaseSliderView> views = new ArrayList<>();
 
-        String[] imgUrls = UiUtil.getStringArray(R.array.banner_img_urls);
-        String[] titles = UiUtil.getStringArray(R.array.banner_titles);
+        String[] imgUrls = UiUtils.getStringArray(R.array.banner_img_urls);
+        String[] titles = UiUtils.getStringArray(R.array.banner_titles);
 
         for (int i = 0; i < imgUrls.length; i++) {
             TextSliderView sliderView = new TextSliderView(context);

@@ -9,7 +9,7 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.HomeCampaign;
 import com.chhd.cniaoshops.bean.HomeCategory;
 import com.chhd.cniaoshops.ui.base.adapter.SimpleMultiItemAdapter;
-import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public class HomeCategoryAdapter extends SimpleMultiItemAdapter<HomeCampaign, Ba
             holder.addOnClickListener(R.id.iv_small_bottom);
 
         } catch (Exception e) {
-            LoggerUtil.e(e);
+            LoggerUtils.e(e);
         }
 
     }

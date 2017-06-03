@@ -6,10 +6,10 @@ import android.util.SparseArray;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.bean.Wares;
-import com.chhd.cniaoshops.util.ToastyUtil;
-import com.chhd.cniaoshops.util.JsonUtil;
-import com.chhd.per_library.util.SpUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.cniaoshops.util.ToastyUtils;
+import com.chhd.cniaoshops.util.JsonUtils;
+import com.chhd.per_library.util.SpUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class CartProvider {
         }
         array.put(item.getId().intValue(), item);
         commit();
-        ToastyUtil.success(String.format("%1$s：%2$s", UiUtil.getString(R.string.add_shopping_cart_success), cart.getName()));
+        ToastyUtils.success(String.format("%1$s：%2$s", UiUtils.getString(R.string.add_shopping_cart_success), cart.getName()));
     }
 
     public void put(Wares wares) {
@@ -68,7 +68,7 @@ public class CartProvider {
      */
     private void commit() {
         List<ShoppingCart> items = sparseToList();
-        SpUtil.putString(KEY_SHOPPING_CARTS, JsonUtil.toJSON(items));
+        SpUtils.putString(KEY_SHOPPING_CARTS, JsonUtils.toJSON(items));
     }
 
     /**
@@ -99,10 +99,10 @@ public class CartProvider {
     }
 
     public List<ShoppingCart> getDataFromLocal() {
-        String json = SpUtil.getString(KEY_SHOPPING_CARTS, "");
+        String json = SpUtils.getString(KEY_SHOPPING_CARTS, "");
         List<ShoppingCart> items = new ArrayList<>();
         if (!TextUtils.isEmpty(json)) {
-            items = JsonUtil.fromJson(json, new TypeToken<List<ShoppingCart>>() {
+            items = JsonUtils.fromJson(json, new TypeToken<List<ShoppingCart>>() {
             }.getType());
         }
         return items;

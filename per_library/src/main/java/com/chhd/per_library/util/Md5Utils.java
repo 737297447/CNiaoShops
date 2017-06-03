@@ -2,9 +2,9 @@ package com.chhd.per_library.util;
 
 import java.security.MessageDigest;
 
-public class Md5Util {
+public class Md5Utils {
 
-    private Md5Util() {
+    private Md5Utils() {
     }
 
     public static String encoder(String text) {

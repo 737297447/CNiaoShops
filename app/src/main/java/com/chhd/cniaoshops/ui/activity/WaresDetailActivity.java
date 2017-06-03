@@ -16,7 +16,7 @@ import com.chhd.cniaoshops.bean.Wares;
 import com.chhd.cniaoshops.biz.CartProvider;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.ui.widget.ProgressView;
-import com.chhd.per_library.util.ToastUtil;
+import com.chhd.per_library.util.ToastUtils;
 
 import butterknife.BindView;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -164,7 +164,7 @@ public class WaresDetailActivity extends BaseActivity {
 
         @JavascriptInterface
         public void buy(long id) {
-            ToastUtil.makeText(R.string.buy_now);
+            ToastUtils.makeText(R.string.buy_now);
         }
     }
 }

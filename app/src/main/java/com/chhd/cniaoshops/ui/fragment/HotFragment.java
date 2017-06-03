@@ -3,14 +3,12 @@ package com.chhd.cniaoshops.ui.fragment;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Page;
 import com.chhd.cniaoshops.bean.Wares;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.http.OnResponse;
 import com.chhd.cniaoshops.http.SimpleCallback;
 import com.chhd.cniaoshops.ui.StatusEnum;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
@@ -20,8 +18,7 @@ import com.chhd.cniaoshops.ui.items.HotWaresItem;
 import com.chhd.cniaoshops.ui.items.ProgressItem;
 import com.chhd.cniaoshops.ui.widget.EmptyView;
 import com.chhd.cniaoshops.ui.widget.header.SinaRefreshView;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.google.gson.Gson;
@@ -30,13 +27,6 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.request.BaseRequest;
-import com.yanzhenjie.nohttp.NoHttp;
-import com.yanzhenjie.nohttp.RequestMethod;
-import com.yanzhenjie.nohttp.rest.CacheMode;
-import com.yanzhenjie.nohttp.rest.Request;
-import com.yanzhenjie.nohttp.rest.RequestQueue;
-import com.yanzhenjie.nohttp.rest.Response;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -98,9 +88,9 @@ public class HotFragment extends BaseFragment implements Constant {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adatper);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtil.dp2px(DIMEN_NORMAL), SpaceItemDecoration.VERTICAL, true));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(DIMEN_NORMAL), SpaceItemDecoration.VERTICAL, true));
 
-        adatper.setFastScroller(fastScroller, UiUtil.getColor(R.color.colorAccent));//Setup FastScroller after the Adapter has been added to the RecyclerView.
+        adatper.setFastScroller(fastScroller, UiUtils.getColor(R.color.colorAccent));//Setup FastScroller after the Adapter has been added to the RecyclerView.
     }
 
     private void refresh() {
@@ -145,7 +135,7 @@ public class HotFragment extends BaseFragment implements Constant {
         int[] colors = new int[SWIPE_REFRESH_LAYOUT_COLORS.length];
 
         for (int i = 0; i < SWIPE_REFRESH_LAYOUT_COLORS.length; i++) {
-            colors[i] = UiUtil.getColor(SWIPE_REFRESH_LAYOUT_COLORS[i]);
+            colors[i] = UiUtils.getColor(SWIPE_REFRESH_LAYOUT_COLORS[i]);
         }
 
         return colors;

@@ -15,11 +15,11 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 /**
  * Created by CWQ on 2016/11/2.
  */
-public class LoggerUtil implements Constant {
+public class LoggerUtils implements Constant {
 
     private static boolean isDebug = Config.isDebug;
 
-    private LoggerUtil() {
+    private LoggerUtils() {
 
     }
 

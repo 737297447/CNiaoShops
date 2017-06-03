@@ -1,26 +1,17 @@
 package com.chhd.cniaoshops.biz;
 
 import android.app.Activity;
-import android.content.Context;
-import android.text.TextUtils;
 
 import com.chhd.cniaoshops.bean.User;
 import com.chhd.cniaoshops.global.App;
 import com.chhd.cniaoshops.global.Constant;
 import com.chhd.cniaoshops.http.SimpleFileCallback;
-import com.chhd.cniaoshops.http.bmob.BmobEx;
 import com.chhd.cniaoshops.http.bmob.SimpleSaveListener;
 import com.chhd.cniaoshops.http.bmob.SimpleUploadListener;
-import com.chhd.cniaoshops.util.DESUtil;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.per_library.util.Md5Util;
+import com.chhd.cniaoshops.util.DESUtils;
+import com.chhd.per_library.util.Md5Utils;
 import com.chhd.sharesdk.login.ThirdPartyUser;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.FileCallback;
-import com.yanzhenjie.nohttp.Headers;
-import com.yanzhenjie.nohttp.NoHttp;
-import com.yanzhenjie.nohttp.download.DownloadListener;
-import com.yanzhenjie.nohttp.download.DownloadRequest;
 
 import java.io.File;
 
@@ -45,7 +36,7 @@ public class BmobApi implements Constant {
     public void requestLogin(String username, String pwd) {
         BmobUser user = new BmobUser();
         user.setUsername(username);
-        user.setPassword(DESUtil.encode(KEY_DES, pwd));
+        user.setPassword(DESUtils.encode(KEY_DES, pwd));
         user.login(new SimpleSaveListener<User>(context) {
             @Override
             public void success(User user) {
@@ -65,7 +56,7 @@ public class BmobApi implements Constant {
     public void requestLogin(final ThirdPartyUser thirdPartyUser) {
         BmobUser user = new BmobUser();
         user.setUsername(thirdPartyUser.getUserID());
-        user.setPassword(DESUtil.encode(KEY_DES, thirdPartyUser.getUserID()));
+        user.setPassword(DESUtils.encode(KEY_DES, thirdPartyUser.getUserID()));
         user.login(new SimpleSaveListener<User>(context) {
             @Override
             public void success(User user) {
@@ -108,7 +99,7 @@ public class BmobApi implements Constant {
         User user = new User();
         user.setUsername(username);
         user.setNickname(username);
-        user.setPassword(DESUtil.encode(KEY_DES, pwd));
+        user.setPassword(DESUtils.encode(KEY_DES, pwd));
         user.signUp(new SimpleSaveListener<User>(context) {
             @Override
             public void success(User user) {
@@ -129,7 +120,7 @@ public class BmobApi implements Constant {
         User user = new User();
         user.setUsername(thirdPartyUser.getUserID());
         user.setNickname(thirdPartyUser.getNickname());
-        user.setPassword(DESUtil.encode(KEY_DES, thirdPartyUser.getUserID()));
+        user.setPassword(DESUtils.encode(KEY_DES, thirdPartyUser.getUserID()));
         user.setAvatar(avater);
         user.signUp(new SimpleSaveListener<User>(context) {
             @Override
@@ -148,13 +139,13 @@ public class BmobApi implements Constant {
     }
 
     public void requestRegisterByNumber(final String phone, String code, final String pwd) {
-        String encoder = Md5Util.encoder(phone);
+        String encoder = Md5Utils.encoder(phone);
         encoder = encoder.substring(encoder.length() - 10, encoder.length());
         User user = new User();
         user.setMobilePhoneNumber(phone);
         user.setUsername(encoder);
         user.setNickname(phone);
-        user.setPassword(DESUtil.encode(KEY_DES, pwd));
+        user.setPassword(DESUtils.encode(KEY_DES, pwd));
         user.signOrLogin(code, new SimpleSaveListener<User>(context) {
             @Override
             public void success(User user) {

@@ -1,11 +1,9 @@
 package com.chhd.cniaoshops.ui.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,8 +25,8 @@ import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.GridSpaceItemDecoration;
 import com.chhd.cniaoshops.ui.listener.clazz.SliderClickListener;
 import com.chhd.cniaoshops.ui.widget.EmptyView;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -40,7 +38,6 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.request.BaseRequest;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
-import com.yanzhenjie.nohttp.rest.CacheMode;
 import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 
@@ -121,7 +118,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
                     showWaresData(data);
                     waresAdapter.setCustomEmptyView();
                 } catch (Exception e) {
-                    LoggerUtil.e(e);
+                    LoggerUtils.e(e);
                 }
             }
 
@@ -240,7 +237,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
             lvCategory.setItemChecked(0, true);
             emptyView.setEmptyView(categories);
         } catch (Exception e) {
-            LoggerUtil.e(e);
+            LoggerUtils.e(e);
         }
     }
 
@@ -256,7 +253,7 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
 
         rvWares.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rvWares.setAdapter(waresAdapter);
-        rvWares.addItemDecoration(new GridSpaceItemDecoration(2, UiUtil.dp2px(DIMEN_SMALL), true, true));
+        rvWares.addItemDecoration(new GridSpaceItemDecoration(2, UiUtils.dp2px(DIMEN_SMALL), true, true));
 
         refreshLayout.setOnRefreshListener(refreshListenerAdapter);
         refreshLayout.startRefresh();
@@ -298,13 +295,13 @@ public class CategoryFragment extends BaseFragment implements AdapterView.OnItem
         sliderLayout = ButterKnife.findById(header, R.id.slider_layout);
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sliderLayout.getLayoutParams();
-        params.height = UiUtil.dp2px(150);
+        params.height = UiUtils.dp2px(150);
         sliderLayout.setLayoutParams(params);
 
         View indicators = View.inflate(getActivity(), R.layout.indicators_default, null);
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtil.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
+        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtils.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
         params.alignWithParent = true;
-        params.rightMargin = UiUtil.dp2px(10);
+        params.rightMargin = UiUtils.dp2px(10);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         ((RelativeLayout) header).addView(indicators, params);

@@ -13,9 +13,9 @@ import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.SettingService;
 
 
-public class DialogUtil {
+public class DialogUtils {
 
-    private DialogUtil() {
+    private DialogUtils() {
     }
 
     public static MaterialDialog.Builder newBuilder(Context context) {

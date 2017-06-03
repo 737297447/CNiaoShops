@@ -20,9 +20,9 @@ import com.chhd.cniaoshops.ui.adapter.WaresAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.LazyFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
 import com.chhd.cniaoshops.ui.decoration.StaggeredSpaceItemDecoration;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.JsonUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.JsonUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.google.gson.reflect.TypeToken;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -137,14 +137,14 @@ public class WaresListFragment extends LazyFragment implements OnRefreshListener
                     public void success(String response, int id) {
                         try {
                             curPage = ++curPage;
-                            Page<Wares> page = JsonUtil.fromJson(response, new TypeToken<Page<Wares>>() {
+                            Page<Wares> page = JsonUtils.fromJson(response, new TypeToken<Page<Wares>>() {
                             }.getType());
                             showWaresData(page);
                             if (items.size() > 0) {
                                 swipeToLoadLayout.setLoadMoreEnabled(true);
                             }
                         } catch (Exception e) {
-                            LoggerUtil.e(e);
+                            LoggerUtils.e(e);
                         }
                     }
 
@@ -191,8 +191,8 @@ public class WaresListFragment extends LazyFragment implements OnRefreshListener
         }
     };
 
-    private RecyclerView.ItemDecoration verItemDec = new SpaceItemDecoration(UiUtil.dp2px(DIMEN_NORMAL), SpaceItemDecoration.VERTICAL, true);
-    private RecyclerView.ItemDecoration gridItemDec = new StaggeredSpaceItemDecoration(UiUtil.dp2px(DIMEN_NORMAL / 2));
+    private RecyclerView.ItemDecoration verItemDec = new SpaceItemDecoration(UiUtils.dp2px(DIMEN_NORMAL), SpaceItemDecoration.VERTICAL, true);
+    private RecyclerView.ItemDecoration gridItemDec = new StaggeredSpaceItemDecoration(UiUtils.dp2px(DIMEN_NORMAL / 2));
 
     public void setGridList() {
         listMode = LIST_GRID;
@@ -207,7 +207,7 @@ public class WaresListFragment extends LazyFragment implements OnRefreshListener
         rvWares.removeItemDecoration(verItemDec);
         rvWares.removeItemDecoration(gridItemDec);
         rvWares.addItemDecoration(gridItemDec);
-        rvWares.setPadding(UiUtil.dp2px(DIMEN_NORMAL / 2), UiUtil.dp2px(DIMEN_NORMAL / 2), UiUtil.dp2px(DIMEN_NORMAL / 2), UiUtil.dp2px(DIMEN_NORMAL / 2));
+        rvWares.setPadding(UiUtils.dp2px(DIMEN_NORMAL / 2), UiUtils.dp2px(DIMEN_NORMAL / 2), UiUtils.dp2px(DIMEN_NORMAL / 2), UiUtils.dp2px(DIMEN_NORMAL / 2));
         rvWares.removeOnScrollListener(onScrollListener);
         rvWares.addOnScrollListener(onScrollListener);
     }

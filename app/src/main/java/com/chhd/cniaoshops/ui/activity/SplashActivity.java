@@ -8,7 +8,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.global.App;
-import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class SplashActivity extends BaseActivity {
                         });
                     }
                 } catch (Exception e) {
-                    LoggerUtil.e(e);
+                    LoggerUtils.e(e);
                 }
             }
         }.start();

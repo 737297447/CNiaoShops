@@ -6,8 +6,8 @@ import android.os.Handler;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.cniaoshops.util.LoggerUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.cniaoshops.util.LoggerUtils;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
@@ -31,7 +31,7 @@ public abstract class SimpleLoginListener<T> extends LogInListener<T> implements
     public final void onBefore() {
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
-            dialog = DialogUtil.newProgressDialog(progressDialog);
+            dialog = DialogUtils.newProgressDialog(progressDialog);
             dialog.show();
         }
         before();
@@ -44,7 +44,7 @@ public abstract class SimpleLoginListener<T> extends LogInListener<T> implements
             if (e == null) {
                 success(t);
             } else {
-                LoggerUtil.e(e);
+                LoggerUtils.e(e);
                 error(e);
             }
             onAfter();
@@ -55,7 +55,7 @@ public abstract class SimpleLoginListener<T> extends LogInListener<T> implements
                     if (e == null) {
                         success(t);
                     } else {
-                        LoggerUtil.e(e);
+                        LoggerUtils.e(e);
                         error(e);
                     }
                     onAfter();

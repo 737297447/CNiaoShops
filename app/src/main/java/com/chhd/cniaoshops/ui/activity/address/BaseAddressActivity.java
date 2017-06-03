@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,8 +17,8 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.Province;
 import com.chhd.cniaoshops.ui.activity.PlaceChooseActivity;
 import com.chhd.cniaoshops.ui.base.activity.HideSoftInputActivity;
-import com.chhd.cniaoshops.util.JsonUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.cniaoshops.util.JsonUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -71,7 +70,7 @@ public class BaseAddressActivity extends HideSoftInputActivity {
     }
 
     private void initData() {
-        provinces = JsonUtil.fromJson(getJson(this, "province.json"), new TypeToken<List<Province>>() {
+        provinces = JsonUtils.fromJson(getJson(this, "province.json"), new TypeToken<List<Province>>() {
         }.getType());
         cities = new ArrayList<>();
         districts = new ArrayList<>();
@@ -132,9 +131,9 @@ public class BaseAddressActivity extends HideSoftInputActivity {
                 .setSubmitText(getString(R.string.confirm))
                 .setCancelText(getString(R.string.cancel))
                 .setDividerColor(Color.parseColor("#CCCCCC"))
-                .setTextColorCenter(UiUtil.getColor(R.color.def_text_black)) //设置选中项文字颜色
-                .setSubmitColor(UiUtil.getColor(R.color.def_text_mid))
-                .setCancelColor(UiUtil.getColor(R.color.def_text_mid))
+                .setTextColorCenter(UiUtils.getColor(R.color.def_text_black)) //设置选中项文字颜色
+                .setSubmitColor(UiUtils.getColor(R.color.def_text_mid))
+                .setCancelColor(UiUtils.getColor(R.color.def_text_mid))
                 .setContentTextSize(16)
                 .setTitleSize(14)
                 .setSubCalSize(14)

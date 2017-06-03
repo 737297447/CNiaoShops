@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.chhd.cniaoshops.R;
 import com.chhd.sharesdk.login.ThirdPartyUser;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
-import com.chhd.cniaoshops.util.JsonUtil;
+import com.chhd.cniaoshops.util.JsonUtils;
 import com.chhd.sharesdk.login.OnLoginListener;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +38,7 @@ public class ThirdPartyRegActivity extends BaseActivity {
         initActionBar();
 
         Platform platform = ShareSDK.getPlatform(tmpPlatform);
-        user = JsonUtil.fromJson(platform.getDb().exportData(), ThirdPartyUser.class);
+        user = JsonUtils.fromJson(platform.getDb().exportData(), ThirdPartyUser.class);
 
         Picasso
                 .with(this)

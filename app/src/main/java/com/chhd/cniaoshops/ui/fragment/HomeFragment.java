@@ -26,7 +26,7 @@ import com.chhd.cniaoshops.ui.adapter.HomeCategoryAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
 import com.chhd.cniaoshops.ui.listener.clazz.SliderClickListener;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -163,7 +163,7 @@ public class HomeFragment extends BaseFragment {
         adapter.setOnItemChildClickListener(onItemChildClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtil.dp2px(DIMEN_NORMAL)));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(DIMEN_NORMAL)));
     }
 
 
@@ -236,9 +236,9 @@ public class HomeFragment extends BaseFragment {
         sliderLayout = ButterKnife.findById(header, R.id.slider_layout);
 
         View indicators = View.inflate(getActivity(), R.layout.indicators_bird, null);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtil.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, UiUtils.dp2px(BANNER_DESCRIPTION_LAYOUT_HEIGHT));
         params.alignWithParent = true;
-        params.rightMargin = UiUtil.dp2px(10);
+        params.rightMargin = UiUtils.dp2px(10);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         ((RelativeLayout) header).addView(indicators, params);

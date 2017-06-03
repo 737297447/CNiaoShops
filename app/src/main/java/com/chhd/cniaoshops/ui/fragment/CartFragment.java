@@ -24,8 +24,8 @@ import com.chhd.cniaoshops.ui.activity.WaresDetailActivity;
 import com.chhd.cniaoshops.ui.adapter.CartAdapter;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.widget.CnToolbar;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.per_library.util.UiUtils;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.container.MeituanHeader;
 import com.liaoinstan.springview.widget.SpringView;
@@ -85,7 +85,7 @@ public class CartFragment extends BaseFragment {
         springView.setType(SpringView.Type.FOLLOW);
         springView.setListener(onFreshListener);
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiUtil.dp2px(50));
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiUtils.dp2px(50));
         View footerView = new View(getActivity());
         footerView.setLayoutParams(params);
 
@@ -103,7 +103,7 @@ public class CartFragment extends BaseFragment {
         @Override
         public void onItemChildLongClick(final BaseQuickAdapter adapter, View view, int position) {
             final int pos = position;
-            DialogUtil
+            DialogUtils
                     .newBuilder(getActivity())
                     .title(R.string.operate)
                     .items(Html.fromHtml(String.format("<font color='#999999'>%s</font>", getString(R.string.delete))))

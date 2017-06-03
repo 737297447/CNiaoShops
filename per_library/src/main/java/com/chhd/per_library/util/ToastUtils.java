@@ -2,16 +2,16 @@ package com.chhd.per_library.util;
 
 import android.widget.Toast;
 
-public class ToastUtil {
+public class ToastUtils {
 
     private static Toast toast;
 
-    private ToastUtil() {
+    private ToastUtils() {
     }
 
     public static void makeText(CharSequence text) {
         if (toast == null) {
-            toast = Toast.makeText(UiUtil.getContext(), text, Toast.LENGTH_SHORT);
+            toast = Toast.makeText(UiUtils.getContext(), text, Toast.LENGTH_SHORT);
         }
         toast.setText(text);
         toast.show();
@@ -19,7 +19,7 @@ public class ToastUtil {
 
     public static void makeText(int resId) {
         if (toast == null) {
-            toast = Toast.makeText(UiUtil.getContext(), resId, Toast.LENGTH_SHORT);
+            toast = Toast.makeText(UiUtils.getContext(), resId, Toast.LENGTH_SHORT);
         }
         toast.setText(resId);
         toast.show();

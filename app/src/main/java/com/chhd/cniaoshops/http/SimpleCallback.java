@@ -9,9 +9,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Config;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.request.BaseRequest;
 import com.orhanobut.logger.Logger;
@@ -53,7 +53,7 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
         this.request = request;
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
-            dialog = DialogUtil.newProgressDialog(progressDialog);
+            dialog = DialogUtils.newProgressDialog(progressDialog);
             dialog.show();
         }
         before(request);
@@ -176,7 +176,7 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
 
     public void error(Call call, Response response, Exception e) {
         if (isToastError || progressDialog != null) {
-            ToastyUtil.error(R.string.network_connect_fail);
+            ToastyUtils.error(R.string.network_connect_fail);
         }
     }
 
@@ -236,7 +236,7 @@ public abstract class SimpleCallback extends StringCallback implements Constant 
         try {
             return response.body().string();
         } catch (Exception e) {
-            LoggerUtil.e(e);
+            LoggerUtils.e(e);
         }
         return "";
     }

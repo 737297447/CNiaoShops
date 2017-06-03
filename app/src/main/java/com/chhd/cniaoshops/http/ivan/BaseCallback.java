@@ -1,4 +1,4 @@
-package com.chhd.cniaoshops.http.lvan;
+package com.chhd.cniaoshops.http.ivan;
 
 import com.google.gson.internal.$Gson$Types;
 

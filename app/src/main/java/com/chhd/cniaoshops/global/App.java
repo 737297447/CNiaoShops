@@ -12,10 +12,9 @@ import android.widget.Toast;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.User;
 import com.chhd.cniaoshops.biz.UserLocalData;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
 import com.chhd.per_library.global.BaseApplication;
-import com.chhd.per_library.util.UiUtil;
 import com.lzy.ninegrid.NineGridView;
 import com.lzy.okgo.OkGo;
 import com.squareup.picasso.Picasso;
@@ -310,8 +309,8 @@ public class App extends BaseApplication implements Constant {
                     try {
                         // 建议使用下面方式在控制台打印异常，这样就可以在Error级别看到红色log
                         if (Config.isDebug) {
-                            LoggerUtil.e(throwable);
-                            ToastyUtil.error("Exception Happend\n" + thread + "\n" + throwable.toString(), Toast.LENGTH_LONG);
+                            LoggerUtils.e(throwable);
+                            ToastyUtils.error("Exception Happend\n" + thread + "\n" + throwable.toString(), Toast.LENGTH_LONG);
                         }
                     } catch (Throwable e) {
 

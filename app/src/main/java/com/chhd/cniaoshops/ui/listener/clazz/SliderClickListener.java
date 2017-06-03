@@ -8,7 +8,7 @@ import android.os.Build;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.activity.HorScrollPicActivity;
 import com.chhd.cniaoshops.ui.listener.PageChangeListener;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 
@@ -30,7 +30,7 @@ public class SliderClickListener implements BaseSliderView.OnSliderClickListener
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Intent intent = new Intent(activity, HorScrollPicActivity.class);
-        intent.putExtra("imgUrls", UiUtil.getStringArray(R.array.banner_img_urls));
+        intent.putExtra("imgUrls", UiUtils.getStringArray(R.array.banner_img_urls));
         intent.putExtra("pos", sliderLayout.getCurrentPosition());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             HorScrollPicActivity.setPageChangeListener(pageChangeListener);

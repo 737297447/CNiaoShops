@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -23,7 +22,6 @@ import com.chhd.cniaoshops.ui.fragment.HotFragment;
 import com.chhd.cniaoshops.ui.fragment.MineFragment;
 import com.chhd.cniaoshops.ui.widget.CnToolbar;
 import com.chhd.cniaoshops.ui.widget.FragmentTabHost;
-import com.chhd.cniaoshops.util.ToastyUtil;
 
 import java.util.ArrayList;
 import java.util.List;

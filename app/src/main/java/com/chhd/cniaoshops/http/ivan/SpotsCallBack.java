@@ -1,9 +1,9 @@
-package com.chhd.cniaoshops.http.lvan;
+package com.chhd.cniaoshops.http.ivan;
 
 import android.content.Context;
 
 import com.chhd.cniaoshops.R;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 
 import dmax.dialog.SpotsDialog;
 import okhttp3.Request;
@@ -20,7 +20,7 @@ public abstract class SpotsCallBack<T> extends BaseCallback<T> {
     }
 
     private void initSpotsDialog() {
-        mDialog = new SpotsDialog(mContext, UiUtil.getString(R.string.loading));
+        mDialog = new SpotsDialog(mContext, UiUtils.getString(R.string.loading));
     }
 
     public void showDialog() {

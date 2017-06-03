@@ -10,8 +10,8 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.biz.BmobApi;
 import com.chhd.cniaoshops.http.bmob.BmobEx;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.per_library.util.AppUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.per_library.util.AppUtils;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
@@ -57,7 +57,7 @@ public class RegByNumberFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        etPhone.setText(AppUtil.getMobliePhone());
+        etPhone.setText(AppUtils.getMobliePhone());
     }
 
     @OnClick({R.id.btn_code, R.id.btn_register})
@@ -140,7 +140,7 @@ public class RegByNumberFragment extends BaseFragment {
             @Override
             public void done(Integer smsId, BmobException e) {
                 if (e == null) {
-                    LoggerUtil.i("smsId: " + smsId);
+                    LoggerUtils.i("smsId: " + smsId);
                 } else {
                     BmobEx.handlerError(e);
                 }

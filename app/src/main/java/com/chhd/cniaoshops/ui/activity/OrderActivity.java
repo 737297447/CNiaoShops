@@ -11,20 +11,16 @@ import com.chhd.cniaoshops.bean.Order;
 import com.chhd.cniaoshops.http.bmob.SimpleFindListener;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.ui.fragment.OrderFragment;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
 import com.chhd.per_library.ui.base.SimpleFmPagerAdapter;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 public class OrderActivity extends BaseActivity {
 
@@ -36,7 +32,7 @@ public class OrderActivity extends BaseActivity {
     ViewPager viewPager;
 
     private List<Fragment> fragments = new ArrayList<>();
-    private String[] titles = new String[]{UiUtil.getString(R.string.whole), UiUtil.getString(R.string.unpaid), UiUtil.getString(R.string.pay_success), UiUtil.getString(R.string.pay_fail)};
+    private String[] titles = new String[]{UiUtils.getString(R.string.whole), UiUtils.getString(R.string.unpaid), UiUtils.getString(R.string.pay_success), UiUtils.getString(R.string.pay_fail)};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +55,7 @@ public class OrderActivity extends BaseActivity {
     }
 
     private void showData(List<Order> list) {
-        LoggerUtil.i("size: " + list.size());
+        LoggerUtils.i("size: " + list.size());
         for (int i = 0; i < titles.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(titles[i]));
             Fragment fragment = OrderFragment.newInstance(titles[i], list);

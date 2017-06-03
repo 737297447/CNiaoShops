@@ -9,8 +9,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Config;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
 import com.orhanobut.logger.Logger;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Response;
@@ -51,7 +51,7 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
     public final void onStart(int what) {
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
-            dialog = DialogUtil.newProgressDialog(progressDialog);
+            dialog = DialogUtils.newProgressDialog(progressDialog);
             dialog.show();
         }
         start(what);
@@ -122,7 +122,7 @@ public abstract class OnResponse<T> implements OnResponseListener<T>, Constant {
 
     public void failed(int what, Response<T> response) {
         if (isToastError || progressDialog != null) {
-            ToastyUtil.error(R.string.network_connect_fail);
+            ToastyUtils.error(R.string.network_connect_fail);
         }
     }
 

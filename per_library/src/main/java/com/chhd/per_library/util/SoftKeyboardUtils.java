@@ -10,9 +10,9 @@ import java.util.TimerTask;
 /**
  * Created by Andy on 2016/10/22.
  */
-public class SoftKeyboardUtil {
+public class SoftKeyboardUtils {
 
-    private SoftKeyboardUtil() {
+    private SoftKeyboardUtils() {
     }
 
     /**

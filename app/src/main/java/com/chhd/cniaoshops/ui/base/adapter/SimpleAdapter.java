@@ -12,9 +12,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
@@ -84,7 +83,7 @@ public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQui
             if (isLoadMoreEnable()) {
                 loadMoreEnd();
             } else {
-                ToastyUtil.warning(R.string.no_to_more);
+                ToastyUtils.warning(R.string.no_to_more);
             }
         }
     }
@@ -92,7 +91,7 @@ public abstract class SimpleAdapter<T, K extends BaseViewHolder> extends BaseQui
     @Override
     public void remove(int position) {
         super.remove(position);
-        LoggerUtil.i("size: " + getData().size());
+        LoggerUtils.i("size: " + getData().size());
         if (animationView != null) {
             if (getData().size() == 0 && !animationView.isAnimating()) {
                 animationView.playAnimation();

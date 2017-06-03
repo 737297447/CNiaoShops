@@ -9,8 +9,7 @@ import com.chhd.cniaoshops.bean.User;
 import com.chhd.cniaoshops.biz.UserLocalData;
 import com.chhd.cniaoshops.global.App;
 import com.chhd.cniaoshops.http.bmob.SimpleUpdateListener;
-import com.chhd.cniaoshops.ui.activity.address.AddressAddActivity;
-import com.chhd.per_library.util.SoftKeyboardUtil;
+import com.chhd.per_library.util.SoftKeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class AddressEditActivity extends BaseAddressActivity {
         tvArea.setText(address.getArea());
         etAddress.setText(address.getDetailAddress());
 
-        SoftKeyboardUtil.showSoftInput(etConsignee);
+        SoftKeyboardUtils.showSoftInput(etConsignee);
     }
 
     @Override

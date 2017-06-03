@@ -13,14 +13,14 @@ import java.net.URI;
  * Created by CWQ on 2017/4/19.
  */
 
-public class UriUtil {
+public class UriUtils {
 
-    private UriUtil() {
+    private UriUtils() {
     }
 
     public static Uri getImageContentUri(File imageFile) {
         String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = UiUtil.getContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor = UiUtils.getContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=? ",
                 new String[]{filePath}, null);
         if (cursor != null && cursor.moveToFirst()) {
@@ -31,7 +31,7 @@ public class UriUtil {
             if (imageFile.exists()) {
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Images.Media.DATA, filePath);
-                return UiUtil.getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                return UiUtils.getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             } else {
                 return null;
             }

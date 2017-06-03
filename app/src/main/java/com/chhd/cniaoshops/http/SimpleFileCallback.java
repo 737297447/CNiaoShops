@@ -7,9 +7,9 @@ import android.os.Handler;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.Constant;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
 import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.request.BaseRequest;
 
@@ -49,8 +49,8 @@ public abstract class SimpleFileCallback extends FileCallback implements Constan
         super.onBefore(request);
         startTimeMillis = System.currentTimeMillis();
         if (progressDialog != null && progressDialog instanceof Activity) {
-            LoggerUtil.i("---onBefore---progressDialog---");
-            dialog = DialogUtil.newProgressDialog(progressDialog);
+            LoggerUtils.i("---onBefore---progressDialog---");
+            dialog = DialogUtils.newProgressDialog(progressDialog);
             dialog.show();
         }
         before(request);
@@ -121,7 +121,7 @@ public abstract class SimpleFileCallback extends FileCallback implements Constan
 
     public void error(Call call, Response response, Exception e) {
         if (isToastError || progressDialog != null) {
-            ToastyUtil.error(R.string.network_connect_fail);
+            ToastyUtils.error(R.string.network_connect_fail);
         }
     }
 

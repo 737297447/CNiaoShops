@@ -22,8 +22,8 @@ import com.amap.api.services.help.Tip;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.activity.PlaceChooseActivity;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
-import com.chhd.cniaoshops.util.ToastyUtil;
-import com.chhd.per_library.util.SoftKeyboardUtil;
+import com.chhd.cniaoshops.util.ToastyUtils;
+import com.chhd.per_library.util.SoftKeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +151,7 @@ public class SearchFragment extends BaseFragment {
                     searchText.showDropDown();
                 }
             } else {
-                ToastyUtil.error("erroCode " + rCode);
+                ToastyUtils.error("erroCode " + rCode);
             }
         }
     };
@@ -160,7 +160,7 @@ public class SearchFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_search:
-                ToastyUtil.success("iv_search");
+                ToastyUtils.success("iv_search");
                 search(searchText.getText().toString());
                 break;
         }
@@ -190,7 +190,7 @@ public class SearchFragment extends BaseFragment {
                         searchText.setFocusable(true);
                         searchText.setFocusableInTouchMode(true);
                         searchText.requestFocus();
-                        SoftKeyboardUtil.showSoftInput(searchText);
+                        SoftKeyboardUtils.showSoftInput(searchText);
                     }
 
                     @Override

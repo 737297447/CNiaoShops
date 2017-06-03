@@ -1,9 +1,7 @@
 package com.chhd.cniaoshops.ui.base.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +13,7 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.global.App;
 import com.chhd.cniaoshops.global.Constant;
 import com.chhd.cniaoshops.ui.activity.LoginActivity;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Constant
     }
 
     protected int getStatusBarColor() {
-        return UiUtil.getColor(getStatusBarColorResId());
+        return UiUtils.getColor(getStatusBarColorResId());
     }
 
     protected View getRootView() {

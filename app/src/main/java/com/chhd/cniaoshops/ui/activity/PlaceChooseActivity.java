@@ -6,17 +6,13 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.support.design.widget.TabLayout;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -49,16 +45,15 @@ import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.ui.adapter.SearchResultAdapter;
 import com.chhd.cniaoshops.ui.base.activity.BaseActivity;
 import com.chhd.cniaoshops.ui.fragment.SearchFragment;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.cniaoshops.util.ToastyUtil;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.cniaoshops.util.ToastyUtils;
+import com.chhd.per_library.util.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import es.dmoral.toasty.Toasty;
 
 public class PlaceChooseActivity extends BaseActivity {
 
@@ -182,7 +177,7 @@ public class PlaceChooseActivity extends BaseActivity {
                     doSearchQuery();
                 }
             } else {
-                ToastyUtil.error("error code is " + rCode);
+                ToastyUtils.error("error code is " + rCode);
             }
         }
 
@@ -266,11 +261,11 @@ public class PlaceChooseActivity extends BaseActivity {
                         if (poiItems != null && poiItems.size() > 0) {
                             updateListview(poiItems);
                         } else {
-                            ToastyUtil.warning("无搜索结果");
+                            ToastyUtils.warning("无搜索结果");
                         }
                     }
                 } else {
-                    ToastyUtil.warning("无搜索结果");
+                    ToastyUtils.warning("无搜索结果");
                 }
             }
         }
@@ -299,7 +294,7 @@ public class PlaceChooseActivity extends BaseActivity {
     private String inputSearchKey;
 
     public void searchPoi(Tip result) {
-        LoggerUtil.i("District: " + result.getDistrict() + ",Address: " + result.getAddress() + ",Name: " + result.getName());
+        LoggerUtils.i("District: " + result.getDistrict() + ",Address: " + result.getAddress() + ",Name: " + result.getName());
         isInputKeySearch = true;
         inputSearchKey = result.getName();
         searchLatlonPoint = result.getPoint();
@@ -438,7 +433,7 @@ public class PlaceChooseActivity extends BaseActivity {
             //开始动画
             locationMarker.startAnimation();
         } else {
-            ToastyUtil.error("screenMarker is null");
+            ToastyUtils.error("screenMarker is null");
         }
     }
 
@@ -495,7 +490,7 @@ public class PlaceChooseActivity extends BaseActivity {
     }
 
     private void initActionBar() {
-        toolbar.setBackgroundColor(UiUtil.getColor(R.color.blue_map));
+        toolbar.setBackgroundColor(UiUtils.getColor(R.color.blue_map));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.select_location);
@@ -525,7 +520,7 @@ public class PlaceChooseActivity extends BaseActivity {
 
     @Override
     protected int getStatusBarColor() {
-        return UiUtil.getColor(R.color.blue_map);
+        return UiUtils.getColor(R.color.blue_map);
     }
 
     @Override
@@ -594,7 +589,7 @@ public class PlaceChooseActivity extends BaseActivity {
                     city = amapLocation.getCity();
                 } else {
                     String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
-                    ToastyUtil.error(errText);
+                    ToastyUtils.error(errText);
                 }
             }
         }

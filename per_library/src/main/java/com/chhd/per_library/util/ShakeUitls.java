@@ -12,13 +12,13 @@ import android.view.animation.TranslateAnimation;
  * 振动器
  */
 
-public class ShakeUitl {
+public class ShakeUitls {
 
-    private ShakeUitl() {
+    private ShakeUitls() {
     }
 
     public static void on(View view) {
-        TranslateAnimation animation = new TranslateAnimation(0, UiUtil.dp2px(3), 0, 0);
+        TranslateAnimation animation = new TranslateAnimation(0, UiUtils.dp2px(3), 0, 0);
         animation.setDuration(500);
         animation.setInterpolator(new CycleInterpolator(3));
         view.startAnimation(animation);

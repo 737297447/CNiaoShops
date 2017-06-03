@@ -15,7 +15,7 @@ import com.chhd.cniaoshops.bean.Order;
 import com.chhd.cniaoshops.bean.ShoppingCart;
 import com.chhd.cniaoshops.ui.base.adapter.SimpleAdapter;
 import com.chhd.per_library.ui.base.SimpleHolder;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,19 +42,19 @@ public class OrderAdapter extends SimpleAdapter<Order, BaseViewHolder> {
         switch (status) {
             case Order.STATUS_PAY_WAIT:
                 holder.tvStatus.setText(mContext.getString(R.string.unpaid));
-                holder.tvStatus.setTextColor(UiUtil.getColor(android.R.color.holo_orange_light));
+                holder.tvStatus.setTextColor(UiUtils.getColor(android.R.color.holo_orange_light));
                 holder.action0.setVisibility(View.VISIBLE);
                 holder.action1.setVisibility(View.GONE);
                 break;
             case Order.STATUS_PAY_SUCCESS:
                 holder.tvStatus.setText(mContext.getString(R.string.pay_success));
-                holder.tvStatus.setTextColor(UiUtil.getColor(android.R.color.holo_green_light));
+                holder.tvStatus.setTextColor(UiUtils.getColor(android.R.color.holo_green_light));
                 holder.action0.setVisibility(View.GONE);
                 holder.action1.setVisibility(View.VISIBLE);
                 break;
             case Order.STATUS_PAY_FAIL:
                 holder.tvStatus.setText(mContext.getString(R.string.pay_fail));
-                holder.tvStatus.setTextColor(UiUtil.getColor(android.R.color.holo_red_light));
+                holder.tvStatus.setTextColor(UiUtils.getColor(android.R.color.holo_red_light));
                 holder.action0.setVisibility(View.VISIBLE);
                 holder.action1.setVisibility(View.GONE);
                 break;

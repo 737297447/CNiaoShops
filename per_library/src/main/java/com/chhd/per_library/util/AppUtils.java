@@ -21,15 +21,15 @@ import static android.content.Context.TELEPHONY_SERVICE;
  * Created by Andy on 16/9/23.
  */
 
-public class AppUtil {
+public class AppUtils {
 
-    private AppUtil() {
+    private AppUtils() {
     }
 
     private static String getIMEIId() {
         String IMEIId = "";
         try {
-            TelephonyManager TelephonyMgr = (TelephonyManager) UiUtil.getContext().getSystemService(TELEPHONY_SERVICE);
+            TelephonyManager TelephonyMgr = (TelephonyManager) UiUtils.getContext().getSystemService(TELEPHONY_SERVICE);
             IMEIId = TelephonyMgr.getDeviceId();
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,12 +58,12 @@ public class AppUtil {
     }
 
     private static String getAndroidID() {
-        String androidId = Settings.Secure.getString(UiUtil.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        String androidId = Settings.Secure.getString(UiUtils.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         return androidId;
     }
 
     private static String getWLANMACAddress() {
-        WifiManager wm = (WifiManager) UiUtil.getContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm = (WifiManager) UiUtils.getContext().getSystemService(Context.WIFI_SERVICE);
         String macAddress = wm.getConnectionInfo().getMacAddress();
         return macAddress;
     }
@@ -114,8 +114,8 @@ public class AppUtil {
 
     public static String getVersionName() {
         try {
-            PackageManager manager = UiUtil.getContext().getPackageManager();
-            PackageInfo info = manager.getPackageInfo(UiUtil.getContext().getPackageName(), 0);
+            PackageManager manager = UiUtils.getContext().getPackageManager();
+            PackageInfo info = manager.getPackageInfo(UiUtils.getContext().getPackageName(), 0);
             String versionName = info.versionName;
             return versionName;
         } catch (Exception e) {
@@ -127,7 +127,7 @@ public class AppUtil {
     public static String getMobliePhone() {
         String tel = "";
         try {
-            TelephonyManager tm = (TelephonyManager) UiUtil.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) UiUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
             tel = tm.getLine1Number();
         } catch (SecurityException e) {
             e.printStackTrace();

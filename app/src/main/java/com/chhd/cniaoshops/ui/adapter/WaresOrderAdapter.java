@@ -1,17 +1,15 @@
 package com.chhd.cniaoshops.ui.adapter;
 
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.bean.ShoppingCart;
-import com.chhd.cniaoshops.bean.Wares;
 import com.chhd.cniaoshops.ui.base.adapter.SimpleAdapter;
 import com.chhd.per_library.ui.base.SimpleHolder;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -36,7 +34,7 @@ public class WaresOrderAdapter extends SimpleAdapter<ShoppingCart, BaseViewHolde
                 .with(mContext)
                 .load(item.getImgUrl())
                 .centerCrop()
-                .resize(UiUtil.dp2px(60), UiUtil.dp2px(60))
+                .resize(UiUtils.dp2px(60), UiUtils.dp2px(60))
                 .config(Bitmap.Config.RGB_565)
                 .into(holder.ivPic);
     }

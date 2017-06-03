@@ -9,9 +9,9 @@ import com.chhd.per_library.global.BaseApplication;
 /**
  * Created by CWQ on 2016/10/28.
  */
-public class UiUtil {
+public class UiUtils {
 
-    private UiUtil() {
+    private UiUtils() {
     }
 
     public static Context getContext() {

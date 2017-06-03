@@ -11,7 +11,7 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
 
-public class DESUtil {
+public class DESUtils {
 
     public static final String ALGORITHM_DES = "DES/CBC/PKCS5Padding";
 

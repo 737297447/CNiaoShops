@@ -1,11 +1,11 @@
-package com.chhd.cniaoshops.biz.lvan;
+package com.chhd.cniaoshops.biz.ivan;
 
 import android.content.Context;
 import android.widget.Toast;
 
 import com.chhd.cniaoshops.bean.Page;
-import com.chhd.cniaoshops.http.lvan.OkHttpHelper;
-import com.chhd.cniaoshops.http.lvan.SpotsCallBack;
+import com.chhd.cniaoshops.http.ivan.OkHttpHelper;
+import com.chhd.cniaoshops.http.ivan.SpotsCallBack;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 

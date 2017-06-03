@@ -21,7 +21,7 @@ import com.chhd.cniaoshops.ui.activity.UserActivity;
 import com.chhd.cniaoshops.ui.base.fragment.BaseFragment;
 import com.chhd.cniaoshops.ui.decoration.SpaceItemDecoration;
 import com.chhd.per_library.ui.base.SimpleHolder;
-import com.chhd.per_library.util.UiUtil;
+import com.chhd.per_library.util.UiUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class MineFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String[] titles = UiUtil.getStringArray(R.array.menu_mine_title);
+        String[] titles = UiUtils.getStringArray(R.array.menu_mine_title);
         int[] icons = getIcons();
         for (int i = 0; i < titles.length; i++) {
             menus.add(new Menu(icons[i], titles[i]));
@@ -61,7 +61,7 @@ public class MineFragment extends BaseFragment {
 
         recyclerView.setAdapter(new MineAdapter(menus));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtil.dp2px(0.5f)));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(UiUtils.dp2px(0.5f)));
     }
 
     private int[] getIcons() {
@@ -94,7 +94,7 @@ public class MineFragment extends BaseFragment {
                         .with(getActivity())
                         .load(App.user.getAvatar().getUrl())
                         .centerCrop()
-                        .resize(UiUtil.dp2px(80), UiUtil.dp2px(80))
+                        .resize(UiUtils.dp2px(80), UiUtils.dp2px(80))
                         .into(ivAvatar);
             }
             tvUsername.setText(App.user.getNickname());

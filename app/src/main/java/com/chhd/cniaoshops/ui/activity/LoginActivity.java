@@ -11,11 +11,11 @@ import android.view.View;
 import com.chhd.cniaoshops.R;
 import com.chhd.cniaoshops.biz.BmobApi;
 import com.chhd.cniaoshops.ui.base.activity.HideSoftInputActivity;
-import com.chhd.cniaoshops.util.DialogUtil;
-import com.chhd.cniaoshops.util.JsonUtil;
-import com.chhd.cniaoshops.util.LoggerUtil;
-import com.chhd.per_library.util.AppUtil;
-import com.chhd.per_library.util.ToastUtil;
+import com.chhd.cniaoshops.util.DialogUtils;
+import com.chhd.cniaoshops.util.JsonUtils;
+import com.chhd.cniaoshops.util.LoggerUtils;
+import com.chhd.per_library.util.AppUtils;
+import com.chhd.per_library.util.ToastUtils;
 import com.chhd.sharesdk.login.LoginApi;
 import com.chhd.sharesdk.login.OnLoginListener;
 import com.chhd.sharesdk.login.ThirdPartyUser;
@@ -58,7 +58,7 @@ public class LoginActivity extends HideSoftInputActivity {
                 .rationale(new RationaleListener() {
                     @Override
                     public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
-                        DialogUtil.newRationaleDialog(context, rationale).show();
+                        DialogUtils.newRationaleDialog(context, rationale).show();
                     }
                 })
                 .send();
@@ -72,7 +72,7 @@ public class LoginActivity extends HideSoftInputActivity {
             public void onSucceed(int requestCode, List<String> grantPermissions) {
                 switch (requestCode) {
                     case REQUEST_CODE_READ_SMS:
-                        etAccount.setText(AppUtil.getMobliePhone());
+                        etAccount.setText(AppUtils.getMobliePhone());
                         break;
                 }
             }
@@ -81,9 +81,9 @@ public class LoginActivity extends HideSoftInputActivity {
             public void onFailed(int requestCode, List<String> deniedPermissions) {
                 switch (requestCode) {
                     case REQUEST_CODE_READ_SMS:
-                        ToastUtil.makeText("获取权限失败");
+                        ToastUtils.makeText("获取权限失败");
                         if (AndPermission.hasAlwaysDeniedPermission(context, deniedPermissions)) {
-                            DialogUtil.newDefineSettingDialog(context).show();
+                            DialogUtils.newDefineSettingDialog(context).show();
                         }
                         break;
                 }
@@ -115,10 +115,10 @@ public class LoginActivity extends HideSoftInputActivity {
             break;
             case R.id.iv_qq:
                 Platform platform = ShareSDK.getPlatform((String) v.getTag());
-                LoggerUtil.d("isAuthValid: " + platform.isAuthValid());
+                LoggerUtils.d("isAuthValid: " + platform.isAuthValid());
                 if (platform.isAuthValid()) {
-                    LoggerUtil.d("exportData: " + platform.getDb().exportData());
-                    ThirdPartyUser user = JsonUtil.fromJson(platform.getDb().exportData(), ThirdPartyUser.class);
+                    LoggerUtils.d("exportData: " + platform.getDb().exportData());
+                    ThirdPartyUser user = JsonUtils.fromJson(platform.getDb().exportData(), ThirdPartyUser.class);
                     requestLogin(user);
                 } else {
                     requestThirdPartyLogin((String) v.getTag());
@@ -151,7 +151,7 @@ public class LoginActivity extends HideSoftInputActivity {
 
             public boolean onRegister(ThirdPartyUser user) {
                 // 填写处理注册信息的代码，返回true表示数据合法，注册页面可以关闭
-                LoggerUtil.d("ThirdPartyUser: " + JsonUtil.toJSON(user));
+                LoggerUtils.d("ThirdPartyUser: " + JsonUtils.toJSON(user));
                 return true;
             }
         });
