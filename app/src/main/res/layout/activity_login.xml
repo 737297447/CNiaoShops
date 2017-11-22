@@ -83,7 +83,9 @@
                 android:layout_alignParentRight="true"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
+
                 android:paddingRight="10dp"
+                android:paddingTop="10dp"
                 android:text="@string/forget_password"
                 android:textColor="@color/def_text_mid"
                 android:textSize="@dimen/text_size_normal" />
