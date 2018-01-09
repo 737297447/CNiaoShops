@@ -15,6 +15,3 @@
 ![image](https://github.com/conghuahuadan/CNiaoShops/blob/master/screenshots/Screenshot_2017-05-02-23-36-13-1064663314.png?raw=true)
 ![image](https://github.com/conghuahuadan/CNiaoShops/blob/master/screenshots/Screenshot_2017-05-02-23-36-19-1208628318.png?raw=true)
 ![image](https://github.com/conghuahuadan/CNiaoShops/blob/master/screenshots/Screenshot_2017-05-02-23-36-38-1779997048.png?raw=true)
-
-# GIF
-
